@@ -3,9 +3,18 @@
 <div>Bubbel</div>
 <div>-</div>
 
-<div *ngFor="let product of products">
-  <div routerLink="/product/{{ product.id }}/{{ product.slug }}">
-    {{ product.name }}
+<div class="grid">
+  <div class="grid-item" *ngFor="let product of products">
+    <div>
+      {{ product.name }}
+    </div>
+    <img
+      routerLink="/product/{{ product.id }}/{{ product.slug }}"
+      src="{{ product.imageUrl }}"
+      width="250"
+      height="200"
+      alt="{{ product.name }}"
+    />
+    <div>{{ product.price }} kr</div>
   </div>
-  <div>{{ product.price }}</div>
 </div>
