@@ -1,8 +1,11 @@
-<div>Rött vin</div>
+<button>Rött vin</button>
 <div>Vitt vin</div>
 <div>Bubbel</div>
+<div>-</div>
 
 <div *ngFor="let product of products">
-  <div>{{ product.name }}</div>
+  <div routerLink="/product/{{ product.id }}/{{ product.slug }}">
+    {{ product.name }}
+  </div>
   <div>{{ product.price }}</div>
 </div>

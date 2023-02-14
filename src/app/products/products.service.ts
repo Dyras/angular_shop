@@ -10,7 +10,7 @@ export class ProductService {
   getProducts(): IProduct[] {
     return [
       {
-        productId: 1,
+        id: 1,
         name: 'Piemonte Brachetto',
         manufacturer: 'Rivata',
         description: 'Ett gott rött vin',
