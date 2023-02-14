@@ -4,6 +4,7 @@ export interface IProduct {
   manufacturer?: string;
   description?: string;
   articleType: string;
+  country?: string;
   price: number;
   rating?: number;
   imageUrl?: string;
