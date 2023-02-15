@@ -8,14 +8,13 @@ import { ProductService } from '../products/products.service';
   styleUrls: ['./products-page.component.scss'],
 })
 export class ProductsPageComponent {
-  products: IProduct[] | void = [];
-  products2: BehaviorSubject<IProduct[]> = new BehaviorSubject<IProduct[]>([]);
+  products$: BehaviorSubject<IProduct[]> = new BehaviorSubject<IProduct[]>([]);
 
   constructor(private productService: ProductService) {
     this.fetchProducts();
   }
 
   async fetchProducts() {
-    this.products2.next(await this.productService.getProducts());
+    this.products$.next(await this.productService.getProducts());
   }
 }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { IProduct } from '../products/product';
 import { ProductService } from '../products/products.service';
 
@@ -9,11 +9,32 @@ import { ProductService } from '../products/products.service';
   styleUrls: ['./singleproduct.component.scss'],
 })
 export class SingleProductComponent implements OnInit {
-  product: IProduct | void;
+  defaultObject: IProduct = {
+    id: '0',
+    name: '',
+    manufacturer: '',
+    description: '',
+    articleType: '',
+    price: 0,
+    rating: 0,
+    imageUrl: '',
+    outOfStock: false,
+    slug: '',
+    publishedAt: new Date(),
+  };
 
-  constructor(productService: ProductService) {
-    this.product = productService.getSingleProduct(
-      parseInt(new URL(window.location.href).pathname.split('/')[2])
+  product$: BehaviorSubject<IProduct | null> =
+    new BehaviorSubject<IProduct | null>(this.defaultObject);
+
+  constructor(private productService: ProductService) {
+    this.fetchProducts();
+  }
+
+  async fetchProducts() {
+    this.product$.next(
+      await this.productService.getSingleProduct(
+        new URL(window.location.href).pathname.split('/')[2]
+      )
     );
   }
 

@@ -5,9 +5,10 @@ import {
   collection,
   limit,
   query,
+  doc,
+  getDoc,
 } from '@angular/fire/firestore';
 import { where } from 'firebase/firestore';
-import { of } from 'rxjs';
 import { IProduct } from './product';
 
 @Injectable({
@@ -17,7 +18,7 @@ export class ProductService {
   ref = collection(this.firestore, 'products');
   productList = [
     {
-      id: 1,
+      id: 'wGXbXUmKsAAKBrWQtVZP',
       name: 'Piemonte Brachetto',
       manufacturer: 'Rivata',
       description: 'Ett gott rött vin',
@@ -31,10 +32,10 @@ export class ProductService {
       publishedAt: new Date('2019-03-08'),
     },
     {
-      id: 2,
+      id: 'eLxlb5uHzcKscnkMaW8b',
       name: 'Santa Helena',
       manufacturer: 'Chardonnay',
-      description: 'Ett gott rött vin',
+      description: 'Ett gott vitt vin',
       articleType: 'vitt',
       price: 55,
       rating: 4,
@@ -51,28 +52,25 @@ export class ProductService {
   async getProducts(): Promise<IProduct[]> {
     const q = query(this.ref, limit(8));
 
-    let products: IProduct[] = [];
-    products = await getDocs(q).then((snapshot) => {
-      return snapshot.docs.map((doc) => doc.data() as IProduct);
-    });
-    return products;
-  }
-
-  getSingleProduct(id: number): IProduct | void {
-    const q = query(this.ref, limit(1), where('id', '==', id));
-
-    const product = getDocs(q)
+    const products = await getDocs(q)
       .then((snapshot) => {
-        snapshot.docs.map((doc) => doc.data() as IProduct);
+        return snapshot.docs.map((doc) => doc.data() as IProduct);
       })
       .catch((error) => {
-        console.log('Firrestore error: ', error);
+        console.log('Firestore error: ', error);
       });
-
-    return this.productList[id - 1];
+    if (products) return products;
+    else return this.productList;
   }
 
-  queryBuilder(id: number) {
-    return this.ref, limit(1), where('id', '==', id);
+  async getSingleProduct(id: string): Promise<IProduct | null> {
+    const q = query(this.ref, limit(1), where('id', '==', id));
+
+    const ref = doc(this.firestore, 'products', id);
+
+    const product = await getDoc(ref);
+    console.log(product.data() as IProduct);
+    if (product != null) return product.data() as IProduct;
+    else return null;
   }
 }
