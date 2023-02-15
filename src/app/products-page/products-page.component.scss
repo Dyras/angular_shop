@@ -6,7 +6,7 @@
   padding: 10px;
 }
 
-.grid-item {
+.grid-item:not(:empty) {
   background-color: hwb(180 85% 13%);
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 20px;
