@@ -1,10 +1,20 @@
 import { Injectable } from '@angular/core';
+import {
+  getDocs,
+  Firestore,
+  collection,
+  limit,
+  query,
+} from '@angular/fire/firestore';
+import { where } from 'firebase/firestore';
+import { of } from 'rxjs';
 import { IProduct } from './product';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
+  ref = collection(this.firestore, 'products');
   productList = [
     {
       id: 1,
@@ -36,12 +46,33 @@ export class ProductService {
     },
   ];
 
-  constructor() {}
+  constructor(private firestore: Firestore) {}
   // Create getProducts() method
-  getProducts(): IProduct[] {
-    return this.productList;
+  async getProducts(): Promise<IProduct[]> {
+    const q = query(this.ref, limit(8));
+
+    let products: IProduct[] = [];
+    products = await getDocs(q).then((snapshot) => {
+      return snapshot.docs.map((doc) => doc.data() as IProduct);
+    });
+    return products;
   }
-  getSingleProduct(id: number): IProduct {
+
+  getSingleProduct(id: number): IProduct | void {
+    const q = query(this.ref, limit(1), where('id', '==', id));
+
+    const product = getDocs(q)
+      .then((snapshot) => {
+        snapshot.docs.map((doc) => doc.data() as IProduct);
+      })
+      .catch((error) => {
+        console.log('Firrestore error: ', error);
+      });
+
     return this.productList[id - 1];
+  }
+
+  queryBuilder(id: number) {
+    return this.ref, limit(1), where('id', '==', id);
   }
 }

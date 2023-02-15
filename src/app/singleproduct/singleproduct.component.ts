@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { IProduct } from '../products/product';
 import { ProductService } from '../products/products.service';
 
@@ -8,7 +9,7 @@ import { ProductService } from '../products/products.service';
   styleUrls: ['./singleproduct.component.scss'],
 })
 export class SingleProductComponent implements OnInit {
-  product: IProduct;
+  product: IProduct | void;
 
   constructor(productService: ProductService) {
     this.product = productService.getSingleProduct(

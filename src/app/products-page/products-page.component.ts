@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { IProduct } from '../products/product';
 import { ProductService } from '../products/products.service';
 
@@ -7,13 +8,14 @@ import { ProductService } from '../products/products.service';
   styleUrls: ['./products-page.component.scss'],
 })
 export class ProductsPageComponent {
-  products: IProduct[] = [];
+  products: IProduct[] | void = [];
+  products2: BehaviorSubject<IProduct[]> = new BehaviorSubject<IProduct[]>([]);
 
   constructor(private productService: ProductService) {
     this.fetchProducts();
   }
 
-  fetchProducts() {
-    this.products = this.productService.getProducts();
+  async fetchProducts() {
+    this.products2.next(await this.productService.getProducts());
   }
 }

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "angularshop-3d1ea": {
+      "hosting": {
+        "angular_shop": [
+          "angularshop-3d1ea"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "angularshop-3d1ea"
+  }
+}

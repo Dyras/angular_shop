@@ -4,19 +4,21 @@
 <div>-</div>
 
 <div class="grid">
-  <div class="grid-item" *ngFor="let product of products">
-    <div *ngIf="product.outOfStock == false">
-      <div style="padding-bottom: 10px">
-        {{ product.name }}
+  <div>
+    <div class="grid-item" *ngFor="let product of products2 | async">
+      <div *ngIf="product.outOfStock == false">
+        <div style="padding-bottom: 10px">
+          {{ product.name }}
+        </div>
+        <img
+          routerLink="/product/{{ product.id }}/{{ product.slug }}"
+          src="{{ product.imageUrl }}"
+          width="125"
+          height="170"
+          alt="Bild på {{ product.name }}"
+        />
+        <div style="padding-top: 10px">{{ product.price }} kr</div>
       </div>
-      <img
-        routerLink="/product/{{ product.id }}/{{ product.slug }}"
-        src="{{ product.imageUrl }}"
-        width="125"
-        height="170"
-        alt="{{ product.name }}"
-      />
-      <div style="padding-top: 10px">{{ product.price }} kr</div>
     </div>
   </div>
 </div>
