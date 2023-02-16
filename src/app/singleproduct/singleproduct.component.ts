@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { ProductSaveService } from '../product-save/product-save.service';
 import { IProduct } from '../products/product';
 import { ProductService } from '../products/products.service';
 
@@ -9,6 +10,7 @@ import { ProductService } from '../products/products.service';
   styleUrls: ['./singleproduct.component.scss'],
 })
 export class SingleProductComponent implements OnInit {
+  howManyInCart: number = 0;
   defaultObject: IProduct = {
     id: '0',
     name: '',
@@ -26,7 +28,10 @@ export class SingleProductComponent implements OnInit {
   product$: BehaviorSubject<IProduct | null> =
     new BehaviorSubject<IProduct | null>(this.defaultObject);
 
-  constructor(private productService: ProductService) {
+  constructor(
+    private productService: ProductService,
+    private productSaveService: ProductSaveService
+  ) {
     this.fetchProducts();
   }
 
@@ -38,5 +43,17 @@ export class SingleProductComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  addToCart(amount: number) {
+    const whichItem = new URL(window.location.href).pathname.split('/')[2];
+    this.productSaveService.addToCart(whichItem, amount);
+    this.howManyInCartCheck();
+  }
+  howManyInCartCheck() {
+    const product = new URL(window.location.href).pathname.split('/')[2];
+    this.howManyInCart = this.productSaveService.localStorageChecker(product);
+  }
+
+  ngOnInit(): void {
+    this.howManyInCartCheck();
+  }
 }

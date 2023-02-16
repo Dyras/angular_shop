@@ -1,7 +1,18 @@
-<div>Single product works</div>
-<div *ngIf="product$ | async; let product">
+<div *ngIf="product$ | async; let product; else: notFound">
   <div>{{ product?.name }}</div>
+  <div>
+    <button (click)="addToCart(1)" *ngIf="howManyInCart < 1; else moreThanOne">
+      Köp nu
+    </button>
+  </div>
+  <ng-template #moreThanOne>
+    <div>
+      <button (click)="addToCart(-1)">-</button>
+      <span>{{ howManyInCart }} i korgen</span>
+      <button (click)="addToCart(1)">+</button>
+    </div>
+  </ng-template>
 </div>
-<div *ngIf="!product$ === null">
+<ng-template #notFound>
   <div>Product not found</div>
-</div>
+</ng-template>
