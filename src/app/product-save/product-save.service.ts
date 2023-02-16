@@ -28,7 +28,11 @@ export class ProductSaveService {
       localStorage.setItem('cart', JSON.stringify(storageArray));
     } else if (idPlacement !== null && amount < 0) {
       storageArray[idPlacement].amount = storageArray[idPlacement].amount - 1;
-      localStorage.setItem('cart', JSON.stringify(storageArray));
+
+      if (storageArray[idPlacement].amount == 0) {
+        storageArray.splice(idPlacement, 1);
+        localStorage.setItem('cart', JSON.stringify(storageArray));
+      } else localStorage.setItem('cart', JSON.stringify(storageArray));
     }
   }
 
