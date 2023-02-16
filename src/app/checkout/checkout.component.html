@@ -1,0 +1,7 @@
+<div>Checkout works</div>
+<div>Din varukorg:</div>
+<div>
+  <div *ngFor="let item of itemsInCart$ | async">
+    <div>{{ item.id }}</div>
+  </div>
+</div>
