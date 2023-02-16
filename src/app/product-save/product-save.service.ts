@@ -23,8 +23,6 @@ export class ProductSaveService {
     } else if (idPlacement !== null && amount == 0) {
       storageArray[idPlacement].amount = storageArray[idPlacement].amount + 1;
       localStorage.setItem('cart', JSON.stringify(storageArray));
-
-      localStorage.setItem('cart', JSON.stringify(storageArray));
     } else if (idPlacement !== null && amount >= 0) {
       storageArray[idPlacement].amount = storageArray[idPlacement].amount + 1;
       localStorage.setItem('cart', JSON.stringify(storageArray));
