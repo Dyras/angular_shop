@@ -12,6 +12,7 @@ import { environment } from '../environments/environment';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { SingleProductModule } from './singleproduct/singleproduct.module';
+import { NavbarModule } from './navbar/navbar.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +24,7 @@ import { SingleProductModule } from './singleproduct/singleproduct.module';
     HomeModule,
     BrowserAnimationsModule,
     SingleProductModule,
+    NavbarModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
