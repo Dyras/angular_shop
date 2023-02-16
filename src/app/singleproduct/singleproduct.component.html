@@ -1,7 +1,7 @@
 <div *ngIf="product$ | async; let product; else: notFound">
   <div>{{ product?.name }}</div>
   <div>
-    <button (click)="addToCart(1)" *ngIf="howManyInCart < 1; else moreThanOne">
+    <button (click)="addToCart(0)" *ngIf="howManyInCart < 1; else moreThanOne">
       Köp nu
     </button>
   </div>
