@@ -12,3 +12,7 @@ export interface IProduct {
   slug: string;
   publishedAt?: Date;
 }
+
+export interface IProductSaved extends IProduct {
+  amount: number;
+}

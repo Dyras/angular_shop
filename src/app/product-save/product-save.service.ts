@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { IProduct, IProductSaved } from '../products/product';
 import { IProductSave } from './product-save';
 
 @Injectable({
@@ -7,18 +8,19 @@ import { IProductSave } from './product-save';
 export class ProductSaveService {
   constructor() {}
 
-  addToCart(id: string, amount: number) {
-    let storageArray: IProductSave[];
+  addToCart(product: IProduct, amount: number) {
+    let storageArray: IProductSaved[];
     storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
     let idPlacement = null;
     for (let i = 0; i < storageArray.length; i++) {
-      if (storageArray[i].id === id) {
+      if (storageArray[i].id === product.id) {
         idPlacement = i;
       }
     }
 
     if (idPlacement == null) {
-      storageArray.push({ id: id, amount: amount + 1 });
+      storageArray.push({ ...product, amount: amount + 1 });
+      console.log(storageArray);
       localStorage.setItem('cart', JSON.stringify(storageArray));
     } else if (idPlacement !== null && amount == 0) {
       storageArray[idPlacement].amount = storageArray[idPlacement].amount + 1;

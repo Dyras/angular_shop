@@ -44,8 +44,10 @@ export class SingleProductComponent implements OnInit {
   }
 
   addToCart(amount: number) {
-    const whichItem = new URL(window.location.href).pathname.split('/')[2];
-    this.productSaveService.addToCart(whichItem, amount);
+    console.log(this.product$.value);
+    if (this.product$.value !== null) {
+      this.productSaveService.addToCart(this.product$.value, amount);
+    }
     this.howManyInCartCheck();
   }
   howManyInCartCheck() {
