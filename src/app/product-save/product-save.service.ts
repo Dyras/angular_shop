@@ -14,7 +14,6 @@ export class ProductSaveService {
       const currentCount = localStorage.getItem(id.toString());
       const newCount = parseInt(currentCount) + 1;
       localStorage.setItem(id.toString(), newCount.toString());
-      console.log(e);
     } else if (storageCheck !== null && amount < 0) {
       const currentCount = localStorage.getItem(id.toString());
       const newCount = parseInt(currentCount) - 1;
