@@ -64,8 +64,6 @@ export class ProductService {
   }
 
   async getSingleProduct(id: string): Promise<IProduct | null> {
-    const q = query(this.ref, limit(1), where('id', '==', id));
-
     const ref = doc(this.firestore, 'products', id);
 
     const product = await getDoc(ref);
