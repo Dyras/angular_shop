@@ -1,5 +1,11 @@
 <nav class>
   <a routerLink="">Home</a>
   <a routerLink="/products">Products</a>
-  <a routerLink="/checkout">Varukorg</a>
+  <a
+    matBadge="{{ badgeNumber }}"
+    matBadgeOverlap="false"
+    routerLink="/checkout"
+  >
+    Varukorg
+  </a>
 </nav>
