@@ -1,11 +1,17 @@
 <nav class>
   <a routerLink="">Home</a>
   <a routerLink="/products">Products</a>
-  <a
-    matBadge="{{ badgeNumber }}"
-    matBadgeOverlap="false"
-    routerLink="/checkout"
-  >
-    Varukorg
-  </a>
+  <div *ngIf="badgeNumber == 0; else moreThanZero">
+    <a routerLink="/checkout">Varukorg</a>
+  </div>
+  <ng-template #moreThanZero>
+    <a
+      matBadge="{{ badgeNumber }}"
+      matBadgePosition="below"
+      matBadgeOverlap="false"
+      routerLink="/checkout"
+    >
+      Varukorg
+    </a>
+  </ng-template>
 </nav>

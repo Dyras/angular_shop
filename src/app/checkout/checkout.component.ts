@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { IProduct } from '../products/product';
-import { ProductService } from '../products/products.service';
 
 @Component({
   selector: 'app-checkout',
@@ -9,16 +8,23 @@ import { ProductService } from '../products/products.service';
   styleUrls: ['./checkout.component.scss'],
 })
 export class CheckoutComponent implements OnInit {
+  zeroCheck: number = 0;
   itemsInCart$: BehaviorSubject<IProduct[] | null> = new BehaviorSubject<
     IProduct[] | null
   >(null);
-  constructor(private productService: ProductService) {}
+  constructor() {}
 
   ngOnInit(): void {
     if (localStorage.getItem('cart') !== null) {
-      this.itemsInCart$.next(JSON.parse(localStorage.getItem('cart') || '[]'));
-      console.log(this.itemsInCart$);
-      console.log(localStorage.getItem('cart'));
+      const arrayLength = JSON.parse(localStorage.getItem('cart') || '[]');
+      this.itemsInCart$.next(arrayLength);
+
+      for (let i = 0; i < arrayLength.length; i++) {
+        this.zeroCheck += parseInt(arrayLength[i].amount);
+        if (this.zeroCheck !== 0) {
+          break;
+        }
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
-<div>Checkout works</div>
-<div>Din varukorg:</div>
-<div>
+<div *ngIf="zeroCheck !== 0; else emptyCart">
+  <div>Din varukorg:</div>
   <div *ngFor="let item of itemsInCart$ | async">
     <div>{{ item.name }}</div>
   </div>
 </div>
+<ng-template #emptyCart> <div>Din varukorg är tom</div> </ng-template>
