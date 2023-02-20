@@ -70,4 +70,24 @@ export class ProductService {
     if (product != null) return product.data() as IProduct;
     else return null;
   }
+
+  async getProductsByType(type: string): Promise<IProduct[]> {
+    const q = query(this.ref, limit(8));
+    if (type === 'all') return this.getProducts();
+
+    const products = await getDocs(q)
+      .then((snapshot) => {
+        return snapshot.docs
+          .map((doc) => doc.data() as IProduct)
+          .filter((product) => product.articleType === type);
+      })
+      .catch((error) => {
+        console.log('Firestore error: ', error);
+      });
+    if (products) return products;
+    else {
+      console.log('No products found, returning default list');
+      return this.productList;
+    }
+  }
 }

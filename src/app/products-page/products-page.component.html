@@ -1,7 +1,17 @@
-<button>Rött vin</button>
-<div>Vitt vin</div>
-<div>Bubbel</div>
-<div>-</div>
+<mat-button-toggle-group appearance="standard">
+  <mat-button-toggle value="all" (click)="filterProducts('all')">
+    Alla
+  </mat-button-toggle>
+  <mat-button-toggle value="rott" (click)="filterProducts('rott')">
+    Rött
+  </mat-button-toggle>
+  <mat-button-toggle value="vitt" (click)="filterProducts('vitt')">
+    Vitt
+  </mat-button-toggle>
+  <mat-button-toggle value="rose" (click)="filterProducts('rose')">
+    Rosé
+  </mat-button-toggle>
+</mat-button-toggle-group>
 
 <div>
   <mat-grid-list cols="3" rowHeight="3:1">

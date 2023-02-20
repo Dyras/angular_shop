@@ -17,4 +17,8 @@ export class ProductsPageComponent {
   async fetchProducts() {
     this.products$.next(await this.productService.getProducts());
   }
+
+  async filterProducts(filter: string) {
+    this.products$.next(await this.productService.getProductsByType(filter));
+  }
 }
