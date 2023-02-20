@@ -23,6 +23,7 @@ export class SingleProductComponent implements OnInit {
     imageUrl: '',
     outOfStock: false,
     slug: '',
+    packaging: '',
     publishedAt: new Date(),
   };
 
@@ -49,6 +50,7 @@ export class SingleProductComponent implements OnInit {
     if (this.product$.value !== null) {
       this.productSaveService.addToCart(this.product$.value, amount);
     }
+
     this.howManyInCartCheck();
   }
   howManyInCartCheck() {

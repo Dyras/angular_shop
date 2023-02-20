@@ -11,6 +11,8 @@ export interface IProduct {
   outOfStock: boolean;
   slug: string;
   publishedAt?: Date;
+  packaging: string;
+  vintage?: number;
 }
 
 export interface IProductSaved extends IProduct {

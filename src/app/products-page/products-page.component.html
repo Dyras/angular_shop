@@ -20,13 +20,24 @@
         {{ product.name }}
         {{ product.price }} kr
       </mat-grid-tile-footer>
-      <img
-        routerLink="/product/{{ product.id }}/{{ product.slug }}"
-        src="{{ product.imageUrl }}"
-        width="125"
-        height="170"
-        alt="Bild på {{ product.name }}"
-      />
+      <div *ngIf="product.packaging == 'glass'">
+        <img
+          routerLink="/product/{{ product.id }}/{{ product.slug }}"
+          src="{{ product.imageUrl }}"
+          width="50"
+          height="170"
+          alt="Bild på {{ product.name }}"
+        />
+      </div>
+      <div *ngIf="product.packaging != 'glass'">
+        <img
+          routerLink="/product/{{ product.id }}/{{ product.slug }}"
+          src="{{ product.imageUrl }}"
+          width="140"
+          height="170"
+          alt="Bild på {{ product.name }}"
+        />
+      </div>
       <div style="padding-top: 10px"></div>
     </mat-grid-tile>
   </mat-grid-list>
