@@ -1,7 +1,11 @@
-<div *ngIf="zeroCheck !== 0; else emptyCart">
+<a *ngIf="zeroCheck !== 0; then NotEmptyCart; else emptyCart"></a>
+
+<ng-template #NotEmptyCart>
   <div>Din varukorg:</div>
   <div *ngFor="let item of itemsInCart$ | async">
-    <div>{{ item.name }}</div>
+    <a routerLink="/product/{{ item.id }}/{{ item.slug }}">{{ item.name }} </a>
   </div>
-</div>
-<ng-template #emptyCart> <div>Din varukorg är tom</div> </ng-template>
+</ng-template>
+<ng-template #emptyCart>
+  <div>Din varukorg är tom</div>
+</ng-template>

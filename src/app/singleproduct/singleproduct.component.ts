@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { CartService } from '../cart-service/cart.service';
 import { ProductSaveService } from '../product-save/product-save.service';
 import { IProduct } from '../products/product';
 import { ProductService } from '../products/products.service';
@@ -30,7 +31,8 @@ export class SingleProductComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private productSaveService: ProductSaveService
+    private productSaveService: ProductSaveService,
+    private cartService: CartService
   ) {
     this.fetchProducts();
   }
@@ -44,7 +46,6 @@ export class SingleProductComponent implements OnInit {
   }
 
   addToCart(amount: number) {
-    console.log(this.product$.value);
     if (this.product$.value !== null) {
       this.productSaveService.addToCart(this.product$.value, amount);
     }
@@ -53,6 +54,7 @@ export class SingleProductComponent implements OnInit {
   howManyInCartCheck() {
     const product = new URL(window.location.href).pathname.split('/')[2];
     this.howManyInCart = this.productSaveService.localStorageChecker(product);
+    this.cartService.currentCart$.next(this.cartService.getCartLength());
   }
 
   ngOnInit(): void {

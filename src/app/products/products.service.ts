@@ -8,7 +8,6 @@ import {
   doc,
   getDoc,
 } from '@angular/fire/firestore';
-import { where } from 'firebase/firestore';
 import { IProduct } from './product';
 
 @Injectable({
