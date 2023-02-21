@@ -1,9 +1,27 @@
 <a *ngIf="zeroCheck !== 0; then NotEmptyCart; else emptyCart"></a>
 
 <ng-template #NotEmptyCart>
-  <div>Din varukorg:</div>
-  <div *ngFor="let item of itemsInCart$ | async">
-    <a routerLink="/product/{{ item.id }}/{{ item.slug }}">{{ item.name }} </a>
+  <div class="outer-cart">
+    <div class="inner-cart" *ngFor="let item of itemsInCart$ | async">
+      <div class="img-container">
+        <img
+          src="{{ item.imageUrl }}"
+          alt="product image"
+          routerLink="/product/{{ item.id }}/{{ item.slug }}"
+        />
+      </div>
+      <div style="display: flex">
+        <a
+          class="productName"
+          routerLink="/product/{{ item.id }}/{{ item.slug }}"
+          >{{ item.name }}
+        </a>
+        <div class="productPrice">{{ item.price }} kr styck</div>
+        <div *ngIf="item.amount > 1" class="productTotalPrice">
+          {{ item.price * item.amount }} kr
+        </div>
+      </div>
+    </div>
   </div>
 </ng-template>
 <ng-template #emptyCart>

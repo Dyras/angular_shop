@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IProduct } from '../products/product';
+import { IProduct, IProductSaved } from '../products/product';
 
 @Component({
   selector: 'app-checkout',
@@ -9,8 +9,8 @@ import { IProduct } from '../products/product';
 })
 export class CheckoutComponent implements OnInit {
   zeroCheck: number = 0;
-  itemsInCart$: BehaviorSubject<IProduct[] | null> = new BehaviorSubject<
-    IProduct[] | null
+  itemsInCart$: BehaviorSubject<IProductSaved[] | null> = new BehaviorSubject<
+    IProductSaved[] | null
   >(null);
   constructor() {}
 
