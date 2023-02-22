@@ -1,28 +1,43 @@
 <a *ngIf="zeroCheck !== 0; then NotEmptyCart; else emptyCart"></a>
 
 <ng-template #NotEmptyCart>
-  <div class="outer-cart">
-    <div class="inner-cart" *ngFor="let item of itemsInCart$ | async">
-      <div class="img-container">
-        <img
-          src="{{ item.imageUrl }}"
-          alt="product image"
-          routerLink="/product/{{ item.id }}/{{ item.slug }}"
-        />
-      </div>
-      <div style="display: flex">
-        <a
-          class="productName"
-          routerLink="/product/{{ item.id }}/{{ item.slug }}"
-          >{{ item.name }}
-        </a>
-        <div class="productPrice">{{ item.price }} kr styck</div>
-        <div *ngIf="item.amount > 1" class="productTotalPrice">
-          {{ item.price * item.amount }} kr
+  <ul class="outer-cart">
+    <div style="font-size: x-large; margin-bottom: 4px">Varukorg</div>
+    <li class="inner-cart" *ngFor="let item of itemsInCart$ | async">
+      <div>
+        <div class="product-container">
+          <div class="img-container">
+            <img
+              src="{{ item.imageUrl }}"
+              alt="product image"
+              routerLink="/product/{{ item.id }}/{{ item.slug }}"
+            />
+          </div>
+          <div class="name-box">
+            <a
+              class="productName"
+              routerLink="/product/{{ item.id }}/{{ item.slug }}"
+              >{{ item.name }}
+            </a>
+          </div>
+
+          <div>
+            <div class="product-box">
+              <div class="productPrice">{{ item.price }} kr</div>
+              <a class="productQuantity">
+                <button (click)="changeAmount(item.id, -1)">-</button>
+                <span>{{ item.amount }}</span>
+                <button (click)="changeAmount(item.id, 1)">+</button>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
+    </li>
+    <div>
+      <div class="productsTotalPrice">{{ totalItemCost$ | async }} kr</div>
     </div>
-  </div>
+  </ul>
 </ng-template>
 <ng-template #emptyCart>
   <div>Din varukorg är tom</div>

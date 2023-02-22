@@ -9,6 +9,7 @@ import { CartService } from '../cart-service/cart.service';
 })
 export class NavbarComponent {
   badgeNumber: number | undefined;
+
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
