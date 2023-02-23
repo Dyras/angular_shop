@@ -5,9 +5,17 @@
   Vad söker du?
 
   <div>
-    <div>Alla vinner?</div>
-    <div>Röda viner?</div>
-    <div>Vita viner?</div>
-    <div>Mousserande viner?</div>
+    <div>
+      <a routerLink="/products" [queryParams]="{ type: 'all' }">Alla viner?</a>
+    </div>
+    <div>
+      <a routerLink="/products" [queryParams]="{ type: 'rott' }">Röda viner?</a>
+    </div>
+    <div>
+      <a routerLink="/products" [queryParams]="{ type: 'vitt' }">Vita viner?</a>
+    </div>
+    <div>
+      <a routerLink="/products" [queryParams]="{ type: 'rose' }">Roséviner?</a>
+    </div>
   </div>
 </div>
