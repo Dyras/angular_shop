@@ -17,25 +17,12 @@ export class CheckoutComponent implements OnInit {
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('cart') !== null) {
-      const arrayLength = JSON.parse(localStorage.getItem('cart') || '[]');
-      this.itemsInCart$.next(arrayLength);
+    const localStorageContents = JSON.parse(
+      localStorage.getItem('cart') || '[]'
+    );
+    this.itemsInCart$.next(localStorageContents);
 
-      for (let i = 0; i < arrayLength.length; i++) {
-        this.zeroCheck += parseInt(arrayLength[i].amount);
-        if (this.zeroCheck !== 0) {
-          break;
-        }
-      }
-      let counter = 0;
-
-      for (let i = 0; i < arrayLength.length; i++) {
-        counter += arrayLength[i].amount * arrayLength[i].price;
-        if (i == arrayLength.length - 1) {
-          this.totalItemCost$.next(counter);
-        }
-      }
-    }
+    this.updateTotalCost();
   }
   changeAmount(id: string, amount: number) {
     const storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -57,6 +44,34 @@ export class CheckoutComponent implements OnInit {
         }
       }
     }
+    this.updateTotalCost();
+    this.cartService.currentCart$.next(this.cartService.getCartLength());
+  }
+
+  updateTotalCost() {
+    const storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
+    let counter = 0;
+    if (storageArray.length !== 0) {
+      for (let i = 0; i < storageArray.length; i++) {
+        counter += storageArray[i].amount * storageArray[i].price;
+        if (i == storageArray.length - 1) {
+          this.totalItemCost$.next(counter);
+        }
+      }
+    } else {
+      this.totalItemCost$.next(0);
+    }
+  }
+  removeItem(id: string) {
+    const storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
+    for (let i = 0; i < storageArray.length; i++) {
+      if (storageArray[i].id === id) {
+        storageArray.splice(i, 1);
+        localStorage.setItem('cart', JSON.stringify(storageArray));
+        this.itemsInCart$.next(storageArray);
+      }
+    }
+    this.updateTotalCost();
     this.cartService.currentCart$.next(this.cartService.getCartLength());
   }
 }

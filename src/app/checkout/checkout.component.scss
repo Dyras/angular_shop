@@ -63,8 +63,12 @@
     display: inherit;
   }
 }
-.productsTotalPrice {
-  margin-left: 100px;
-  margin-top: 5px;
-  font-size: 20px;
+.productsTotalPriceDiv {
+  display: flex;
+  justify-content: flex-end;
+
+  .productsTotalPrice {
+    font-size: 17px;
+    background-color: chocolate;
+  }
 }
