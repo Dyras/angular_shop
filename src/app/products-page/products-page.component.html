@@ -11,6 +11,9 @@
   <mat-button-toggle value="rose" (click)="fetchProducts('rose')">
     Rosé
   </mat-button-toggle>
+  <mat-button-toggle value="mousserande" (click)="fetchProducts('mousserande')">
+    Bubbel
+  </mat-button-toggle>
 </mat-button-toggle-group>
 
 <div>
@@ -24,8 +27,8 @@
         <img
           routerLink="/product/{{ product.id }}/{{ product.slug }}"
           src="{{ product.imageUrl }}"
-          width="50"
-          height="170"
+          width="10%"
+          height="10%"
           alt="Bild på {{ product.name }}"
         />
       </div>
@@ -33,8 +36,8 @@
         <img
           routerLink="/product/{{ product.id }}/{{ product.slug }}"
           src="{{ product.imageUrl }}"
-          width="140"
-          height="170"
+          width="25%"
+          height="40%"
           alt="Bild på {{ product.name }}"
         />
       </div>
