@@ -2,7 +2,12 @@
 
 <ng-template #NotEmptyCart>
   <ul class="outer-cart">
-    <div style="font-size: x-large; margin-bottom: 4px">Varukorg</div>
+    <div class="cart-message">Varukorg</div>
+    <tr class="tr-headlines">
+      <th class="th-title">Produkt</th>
+      <th class="th-price">Styckpris</th>
+      <th class="th-total-price">Totalpris</th>
+    </tr>
     <li>
       <div class="inner-cart" *ngFor="let item of itemsInCart$ | async">
         <div class="product-container">
@@ -23,11 +28,35 @@
           <div>
             <div class="product-box">
               <div class="productPrice">{{ item.price }} kr</div>
+
               <a class="productQuantity">
-                <button (click)="changeAmount(item.id, -1)">-</button>
+                <button
+                  mat-mini-fab
+                  class="negative-fab"
+                  aria-label="Example icon button with a minus one icon"
+                  (click)="changeAmount(item.id, -1)"
+                >
+                  <mat-icon>exposure_minus_1</mat-icon>
+                </button>
+
                 <span>{{ item.amount }}</span>
-                <button (click)="changeAmount(item.id, 1)">+</button>
-                <button (click)="removeItem(item.id)">(X)</button>
+
+                <button
+                  mat-mini-fab
+                  class="positive-fab"
+                  aria-label="Example icon button with a plus one icon"
+                  (click)="changeAmount(item.id, 1)"
+                >
+                  <i class="material-icons">plus_one</i>
+                </button>
+                <button
+                  mat-mini-fab
+                  class="remove-fab"
+                  aria-label="Example icon button with a remove icon"
+                  (click)="removeItem(item.id)"
+                >
+                  <i class="material-icons">remove_shopping_cart</i>
+                </button>
               </a>
             </div>
           </div>

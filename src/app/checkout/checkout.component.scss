@@ -1,3 +1,15 @@
+.cart-message {
+  font-size: 24px;
+  font-family: "mmtextboldpro", "mmtextbold", sans-serif;
+  font-weight: bold;
+  margin: 0 auto;
+  color: #000000;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #dddddd;
+  padding: 15px 20px;
+}
+
 .outer-cart {
   margin: auto;
   margin-top: 150px;
@@ -9,7 +21,6 @@
 .inner-cart {
   border: 1px solid gray;
   position: relative;
-  background-color: yellow;
 }
 
 .product-container {
@@ -34,11 +45,9 @@
     display: flex;
     flex-direction: column;
     flex: 1 1 50%;
-    background-color: rgb(67, 98, 77);
     .productName {
       display: block;
       margin-left: 5px;
-      background-color: rgb(67, 98, 77);
       font-size: 20px;
     }
   }
@@ -47,21 +56,18 @@
     display: block;
 
     flex: 1 1 50%;
-    background-color: rgb(133, 69, 69);
 
     .productPrice {
       flex-direction: row;
       align-items: center;
       font-size: 20px;
       flex: 1 1 50%;
-      background-color: gray;
     }
   }
 
   .productQuantity {
     align-items: center;
     font-size: 20px;
-    background-color: rgb(197, 28, 28);
     display: inherit;
   }
 }
@@ -71,6 +77,51 @@
 
   .productsTotalPrice {
     font-size: 17px;
-    background-color: chocolate;
+  }
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+
+.mat-mini-fab.mat-success {
+  color: #f0fff3;
+  background-color: #155724;
+}
+
+.mat-mini-success {
+  background-color: green;
+  color: #fff;
+  height: 24px;
+  width: 24px;
+}
+
+.positive-fab {
+  color: #155724;
+  background-color: black;
+  height: 24px;
+  width: 24px;
+}
+.negative-fab {
+  color: #721c24;
+  background-color: black;
+  height: 24px;
+  width: 24px;
+}
+.remove-fab {
+  color: #721c24;
+  background-color: black;
+  height: 28px;
+  width: 28px;
+}
+.tr-headlines {
+  .th-title {
+  }
+  .th-price {
+  }
+
+  .th-total-price {
   }
 }
