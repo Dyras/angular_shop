@@ -12,21 +12,23 @@
   background-color: yellow;
 }
 
-.img-container {
-  width: 100px;
-  height: 100px;
-
-  img {
-    margin-top: 2px;
-    margin-left: 2px;
-    display: block;
-    margin: 0 auto;
-    width: auto;
-    height: 100px;
-  }
-}
 .product-container {
   display: flex;
+
+  .img-container {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+
+    img {
+      margin-top: 2px;
+      margin-left: 2px;
+      display: block;
+      margin: 0 auto;
+      width: auto;
+      height: 100px;
+    }
+  }
 
   .name-box {
     display: flex;

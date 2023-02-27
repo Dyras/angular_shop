@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
+  margin-top: 50px;
+}
+
+mat-card {
+  display: flex;
+  justify-content: center;
+  max-height: 500px;
+  max-width: 400px;
+  background-color: rgb(140, 136, 136);
+
+  img {
+    max-height: 300px;
+    max-width: fit-content;
+    display: block;
+    margin: 0 auto;
+    padding: 10px;
+  }
+
+  .headline {
+    margin: 0 auto;
+    color: rgb(0, 0, 0);
+    font-size: large;
+  }
+  mat-card-subtitle {
+    margin: 0 auto;
+    color: rgb(0, 0, 0);
+    font-size: large;
+  }
+}
+
+button {
+  background-color: rgb(225, 214, 214);
+  color: white;
+}

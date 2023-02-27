@@ -16,32 +16,22 @@
   </mat-button-toggle>
 </mat-button-toggle-group>
 
-<div>
-  <mat-grid-list cols="3" rowHeight="3:1">
-    <mat-grid-tile *ngFor="let product of products$ | async">
-      <mat-grid-tile-footer style="padding-bottom: 10px">
-        {{ product.name }}
-        {{ product.price }} kr
-      </mat-grid-tile-footer>
-      <div *ngIf="product.packaging == 'glass'">
-        <img
-          routerLink="/product/{{ product.id }}/{{ product.slug }}"
-          src="{{ product.imageUrl }}"
-          width="10%"
-          height="10%"
-          alt="Bild på {{ product.name }}"
-        />
-      </div>
-      <div *ngIf="product.packaging != 'glass'">
-        <img
-          routerLink="/product/{{ product.id }}/{{ product.slug }}"
-          src="{{ product.imageUrl }}"
-          width="25%"
-          height="40%"
-          alt="Bild på {{ product.name }}"
-        />
-      </div>
-      <div style="padding-top: 10px"></div>
-    </mat-grid-tile>
-  </mat-grid-list>
-</div>
+<mat-grid-list cols="4" rowHeight="4:1">
+  <mat-grid-tile *ngFor="let product of products$ | async">
+    <div class="image-container">
+      <img
+        class="image"
+        routerLink="/product/{{ product.id }}/{{ product.slug }}"
+        src="{{ product.imageUrl }}"
+        alt="Bild på {{ product.name }}"
+      />
+    </div>
+    <mat-grid-tile-footer style="padding-top: 10px; padding-bottom: 5px">
+      {{ product.name }}
+      <br />
+      {{ product.price }} kr
+    </mat-grid-tile-footer>
+    <mat-grid-tile-header>{{ product.manufacturer }} </mat-grid-tile-header>
+    <div style="padding-top: 10px"></div>
+  </mat-grid-tile>
+</mat-grid-list>

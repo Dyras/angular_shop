@@ -6,12 +6,11 @@
     <li>
       <div class="inner-cart" *ngFor="let item of itemsInCart$ | async">
         <div class="product-container">
-          <div class="img-container">
-            <img
-              src="{{ item.imageUrl }}"
-              alt="product image"
-              routerLink="/product/{{ item.id }}/{{ item.slug }}"
-            />
+          <div
+            class="img-container"
+            routerLink="/product/{{ item.id }}/{{ item.slug }}"
+          >
+            <img src="{{ item.imageUrl }}" alt="product image" />
           </div>
           <div class="name-box">
             <a

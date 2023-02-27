@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { SingleProductComponent } from './singleproduct.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
-  imports: [CommonModule, MatButtonToggleModule],
+  imports: [CommonModule, MatButtonModule, MatCardModule],
   exports: [SingleProductComponent],
   declarations: [SingleProductComponent],
 })
