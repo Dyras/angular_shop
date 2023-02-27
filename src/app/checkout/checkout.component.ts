@@ -26,6 +26,7 @@ export class CheckoutComponent implements OnInit {
   }
   changeAmount(id: string, amount: number) {
     const storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
+
     if (amount > 0) {
       for (let i = 0; i < storageArray.length; i++) {
         if (storageArray[i].id === id) {
@@ -39,6 +40,9 @@ export class CheckoutComponent implements OnInit {
         if (storageArray[i].id === id) {
           storageArray[i].amount += amount;
 
+          if (storageArray[i].amount <= 0) {
+            storageArray.splice(i, 1);
+          }
           localStorage.setItem('cart', JSON.stringify(storageArray));
           this.itemsInCart$.next(storageArray);
         }
