@@ -4,7 +4,9 @@
   <ul class="outer-cart">
     <div class="cart-message">Varukorg</div>
     <tr class="tr-headlines">
-      <th class="th-title">Produkt</th>
+      <th class="th-picture">Produkt</th>
+      <th class="th-title">Namn</th>
+      <th class="th-amount">Antal</th>
       <th class="th-price">Styckpris</th>
       <th class="th-total-price">Totalpris</th>
     </tr>
@@ -25,41 +27,22 @@
             </a>
           </div>
 
+          <mat-form-field class="amount-box">
+            <mat-select
+              [(value)]="item.amount"
+              (selectionChange)="changeAmount(item.id, item.amount)"
+            >
+              <mat-option *ngFor="let amount of amountList" [value]="amount">
+                {{ amount }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           <div>
             <div class="product-box">
               <div class="productPrice">{{ item.price }} kr</div>
-
-              <a class="productQuantity">
-                <button
-                  mat-mini-fab
-                  class="negative-fab"
-                  aria-label="Example icon button with a minus one icon"
-                  (click)="changeAmount(item.id, -1)"
-                >
-                  <mat-icon>exposure_minus_1</mat-icon>
-                </button>
-
-                <span>{{ item.amount }}</span>
-
-                <button
-                  mat-mini-fab
-                  class="positive-fab"
-                  aria-label="Example icon button with a plus one icon"
-                  (click)="changeAmount(item.id, 1)"
-                >
-                  <i class="material-icons">plus_one</i>
-                </button>
-                <button
-                  mat-mini-fab
-                  class="remove-fab"
-                  aria-label="Example icon button with a remove icon"
-                  (click)="removeItem(item.id)"
-                >
-                  <i class="material-icons">remove_shopping_cart</i>
-                </button>
-              </a>
             </div>
           </div>
+          <div style="font-size: large">{{ item.price * item.amount }} kr</div>
         </div>
       </div>
       <div class="productsTotalPriceDiv">

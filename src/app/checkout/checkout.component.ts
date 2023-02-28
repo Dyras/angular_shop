@@ -9,6 +9,7 @@ import { IProductSaved } from '../products/product';
   styleUrls: ['./checkout.component.scss'],
 })
 export class CheckoutComponent implements OnInit {
+  amountList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   zeroCheck: number = 0;
   itemsInCart$: BehaviorSubject<IProductSaved[] | null> = new BehaviorSubject<
     IProductSaved[] | null
@@ -26,11 +27,10 @@ export class CheckoutComponent implements OnInit {
   }
   changeAmount(id: string, amount: number) {
     const storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
-
     if (amount > 0) {
       for (let i = 0; i < storageArray.length; i++) {
         if (storageArray[i].id === id) {
-          storageArray[i].amount += amount;
+          storageArray[i].amount = amount;
           localStorage.setItem('cart', JSON.stringify(storageArray));
           this.itemsInCart$.next(storageArray);
         }
@@ -38,7 +38,7 @@ export class CheckoutComponent implements OnInit {
     } else if (amount < 0) {
       for (let i = 0; i < storageArray.length; i++) {
         if (storageArray[i].id === id) {
-          storageArray[i].amount += amount;
+          storageArray[i].amount == amount;
 
           if (storageArray[i].amount <= 0) {
             storageArray.splice(i, 1);

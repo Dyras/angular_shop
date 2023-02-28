@@ -25,15 +25,16 @@
 
 .product-container {
   display: flex;
+  justify-content: space-around;
 
   .img-container {
-    width: 100px;
+    width: 60px;
     height: 100px;
     cursor: pointer;
 
     img {
       margin-top: 2px;
-      margin-left: 2px;
+
       display: block;
       margin: 0 auto;
       width: auto;
@@ -42,13 +43,10 @@
   }
 
   .name-box {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 50%;
+    width: 60px;
     .productName {
-      display: block;
-      margin-left: 5px;
-      font-size: 20px;
+      display: table-caption;
+      font-size: larger;
     }
   }
 
@@ -80,48 +78,28 @@
   }
 }
 
-.example-button-container {
-  display: flex;
-  justify-content: center;
-  width: 120px;
-}
-
-.mat-mini-fab.mat-success {
-  color: #f0fff3;
-  background-color: #155724;
-}
-
-.mat-mini-success {
-  background-color: green;
-  color: #fff;
-  height: 24px;
-  width: 24px;
-}
-
-.positive-fab {
-  color: #155724;
-  background-color: black;
-  height: 24px;
-  width: 24px;
-}
-.negative-fab {
-  color: #721c24;
-  background-color: black;
-  height: 24px;
-  width: 24px;
-}
-.remove-fab {
-  color: #721c24;
-  background-color: black;
-  height: 28px;
-  width: 28px;
-}
 .tr-headlines {
+  display: flex;
+  justify-content: space-around;
+
+  .th-picture {
+    width: 60px;
+  }
   .th-title {
+    width: 60px;
+  }
+  .th-amount {
+    width: 60px;
   }
   .th-price {
+    width: 60px;
   }
 
   .th-total-price {
+    width: 60px;
   }
+}
+
+mat-form-field {
+  width: 10%;
 }
