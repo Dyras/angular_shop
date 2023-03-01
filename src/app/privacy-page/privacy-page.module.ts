@@ -1,10 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import { PrivacyPageComponent } from './privacy-page.component';
 
 @NgModule({
-  imports: [],
+  imports: [CommonModule, MatCardModule],
   exports: [PrivacyPageComponent],
   declarations: [PrivacyPageComponent],
-  providers: [],
 })
 export class PrivacyPageModule {}
