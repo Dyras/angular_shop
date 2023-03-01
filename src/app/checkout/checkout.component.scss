@@ -103,3 +103,15 @@
 mat-form-field {
   width: 10%;
 }
+
+@media screen and (max-width: 480px) {
+  .outer-cart {
+    width: 100%;
+  }
+  .inner-cart {
+    width: 100%;
+  }
+  mat-form-field {
+    width: 15%;
+  }
+}
