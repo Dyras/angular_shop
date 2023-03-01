@@ -1,6 +1,8 @@
 <div class="container">
   <mat-card *ngIf="product$ | async; let product; else: notFound">
-    <mat-card-header class="headline">{{ product?.name }}</mat-card-header>
+    <mat-card-header class="headline">
+      <mat-card-title>{{ product?.name }}</mat-card-title>
+    </mat-card-header>
     <img
       mat-card-image
       src="{{ product?.imageUrl }}"
