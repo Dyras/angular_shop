@@ -15,6 +15,7 @@ import { SingleProductModule } from './singleproduct/singleproduct.module';
 import { NavbarModule } from './navbar/navbar.module';
 import { CheckoutModule } from './checkout/checkout.module';
 import { PrivacyPageModule } from './privacy-page/privacy-page.module';
+import { BottomBarModule } from './bottom-bar/bottom-bar.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,6 +30,7 @@ import { PrivacyPageModule } from './privacy-page/privacy-page.module';
     NavbarModule,
     CheckoutModule,
     PrivacyPageModule,
+    BottomBarModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
