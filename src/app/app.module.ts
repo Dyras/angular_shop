@@ -14,8 +14,9 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { SingleProductModule } from './singleproduct/singleproduct.module';
 import { NavbarModule } from './navbar/navbar.module';
 import { CheckoutModule } from './checkout/checkout.module';
-import { PrivacyPageModule } from './privacy-page/privacy-page.module';
+import { PrivacyPageModule } from './bottom-bar/privacy-page/privacy-page.module';
 import { BottomBarModule } from './bottom-bar/bottom-bar.module';
+import { ContactModule } from './bottom-bar/contact/contact.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +32,7 @@ import { BottomBarModule } from './bottom-bar/bottom-bar.module';
     CheckoutModule,
     PrivacyPageModule,
     BottomBarModule,
+    ContactModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

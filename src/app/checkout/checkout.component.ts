@@ -35,7 +35,7 @@ export class CheckoutComponent implements OnInit {
           this.itemsInCart$.next(storageArray);
         }
       }
-    } else if (amount < 0) {
+    } else {
       for (let i = 0; i < storageArray.length; i++) {
         if (storageArray[i].id === id) {
           storageArray[i].amount == amount;

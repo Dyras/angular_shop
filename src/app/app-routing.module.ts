@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { HomeComponent } from './home/home.component';
-import { PrivacyPageComponent } from './privacy-page/privacy-page.component';
+import { PrivacyPageComponent } from './bottom-bar/privacy-page/privacy-page.component';
 import { ProductsPageComponent } from './products-page/products-page.component';
 import { SingleProductComponent } from './singleproduct/singleproduct.component';
+import { ContactComponent } from './bottom-bar/contact/contact.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'privacy',
     component: PrivacyPageComponent,
+  },
+  {
+    path: 'contact',
+    component: ContactComponent,
   },
   {
     path: '**',
