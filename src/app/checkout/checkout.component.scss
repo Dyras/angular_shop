@@ -28,17 +28,16 @@
   justify-content: space-around;
 
   .img-container {
-    width: 60px;
-    height: 100px;
+    max-width: 60px;
+    max-height: 100px;
     cursor: pointer;
 
     img {
       margin-top: 2px;
-
       display: block;
       margin: 0 auto;
-      width: auto;
-      height: 100px;
+      max-height: 100%;
+      max-width: 100%;
     }
   }
 
@@ -52,13 +51,12 @@
 
   .product-box {
     display: block;
-
     flex: 1 1 50%;
 
     .productPrice {
       flex-direction: row;
       align-items: center;
-      font-size: 20px;
+      font-size: 17px;
       flex: 1 1 50%;
     }
   }
@@ -71,7 +69,8 @@
 }
 .productsTotalPriceDiv {
   display: flex;
-  justify-content: flex-end;
+  justify-content: end;
+  padding-right: 50px;
 
   .productsTotalPrice {
     font-size: 17px;
@@ -97,6 +96,7 @@
 
   .th-total-price {
     width: 60px;
+    max-width: max-content;
   }
 }
 
@@ -114,4 +114,11 @@ mat-form-field {
   mat-form-field {
     width: 15%;
   }
+}
+
+.product-totalPrice {
+  color: orange;
+  min-width: 50px;
+  max-width: 50px;
+  font-size: 14px;
 }

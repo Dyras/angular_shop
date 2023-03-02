@@ -27,7 +27,7 @@
             </a>
           </div>
 
-          <mat-form-field class="amount-box">
+          <mat-form-field>
             <mat-select
               [(value)]="item.amount"
               (selectionChange)="changeAmount(item.id, item.amount)"
@@ -42,7 +42,13 @@
               <div class="productPrice">{{ item.price }} kr</div>
             </div>
           </div>
-          <div style="font-size: large">{{ item.price * item.amount }} kr</div>
+          <div>
+            <div>
+              <div class="product-totalPrice">
+                {{ item.price * item.amount }} kr
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="productsTotalPriceDiv">
