@@ -68,7 +68,6 @@ export class ProductService {
     const ref = doc(this.firestore, 'products', id);
 
     const product = await getDoc(ref);
-    console.log(product.data() as IProduct);
     if (product != null) return product.data() as IProduct;
     else return null;
   }
