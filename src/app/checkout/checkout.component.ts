@@ -24,6 +24,7 @@ export class CheckoutComponent implements OnInit {
     this.itemsInCart$.next(localStorageContents);
 
     this.updateTotalCost();
+    document.title = 'Johans webbshop - Kassa';
   }
   changeAmount(id: string, amount: number) {
     const storageArray = JSON.parse(localStorage.getItem('cart') || '[]');

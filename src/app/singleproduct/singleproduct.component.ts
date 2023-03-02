@@ -44,6 +44,7 @@ export class SingleProductComponent implements OnInit {
         new URL(window.location.href).pathname.split('/')[2]
       )
     );
+    document.title = this.product$.value?.name || 'Produktsida';
   }
 
   addToCart(amount: number) {

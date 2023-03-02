@@ -5,5 +5,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./privacy-page.component.scss'],
 })
 export class PrivacyPageComponent {
-  constructor() {}
+  constructor() {
+    document.title = 'Johans webbshop - Sekretess';
+  }
 }

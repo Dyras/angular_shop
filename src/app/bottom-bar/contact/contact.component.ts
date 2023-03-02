@@ -6,5 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./contact.component.scss'],
 })
 export class ContactComponent {
-  constructor() {}
+  constructor() {
+    document.title = 'Johans webbshop - Kontakt';
+  }
 }

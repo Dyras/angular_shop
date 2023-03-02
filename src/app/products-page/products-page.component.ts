@@ -40,5 +40,24 @@ export class ProductsPageComponent {
       this.lastChosenFilter = filter;
       this.products$.next(await this.productService.getProductsByType(filter));
     }
+    let title: string;
+    switch (filter) {
+      case 'rott':
+        title = 'Johans webbshop - Röda viner';
+        break;
+      case 'vitt':
+        title = 'Johans webbshop - Vita viner';
+        break;
+      case 'mousserande':
+        title = 'Johans webbshop - Bubbelviner';
+        break;
+      case 'rose':
+        title = 'Johans webbshop - Roséviner';
+        break;
+      default:
+        title = 'Johans webbshop - Viner';
+        break;
+    }
+    document.title = title;
   }
 }
