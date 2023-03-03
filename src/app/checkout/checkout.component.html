@@ -30,7 +30,7 @@
           <mat-form-field>
             <mat-select
               [(value)]="item.amount"
-              (selectionChange)="changeAmount(item.id, item.amount)"
+              (selectionChange)="updateItem(item, item.amount)"
             >
               <mat-option *ngFor="let amount of amountList" [value]="amount">
                 {{ amount }}

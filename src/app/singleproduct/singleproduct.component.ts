@@ -49,7 +49,7 @@ export class SingleProductComponent implements OnInit {
 
   addToCart(amount: number) {
     if (this.product$.value !== null) {
-      this.productSaveService.addToCart(this.product$.value, amount);
+      this.productSaveService.updateCart(this.product$.value, amount);
     }
 
     this.howManyInCartCheck();

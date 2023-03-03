@@ -7,7 +7,8 @@ import { IProduct, IProductSaved } from '../products/product';
 export class ProductSaveService {
   constructor() {}
 
-  addToCart(product: IProduct, amount: number) {
+  updateCart(product: IProduct, amount: number) {
+    console.log(product, amount);
     if (product.id !== '0') {
       let storageArray: IProductSaved[];
       storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -19,22 +20,15 @@ export class ProductSaveService {
       }
 
       if (idPlacement == null) {
-        storageArray.push({ ...product, amount: amount + 1 });
+        storageArray.push({ ...product, amount: amount });
         console.log(storageArray);
         localStorage.setItem('cart', JSON.stringify(storageArray));
-      } else if (idPlacement !== null && amount == 0) {
-        storageArray[idPlacement].amount = storageArray[idPlacement].amount + 1;
-        localStorage.setItem('cart', JSON.stringify(storageArray));
-      } else if (idPlacement !== null && amount >= 0) {
-        storageArray[idPlacement].amount = storageArray[idPlacement].amount + 1;
-        localStorage.setItem('cart', JSON.stringify(storageArray));
       } else if (idPlacement !== null && amount < 0) {
-        storageArray[idPlacement].amount = storageArray[idPlacement].amount - 1;
-
-        if (storageArray[idPlacement].amount == 0) {
-          storageArray.splice(idPlacement, 1);
-          localStorage.setItem('cart', JSON.stringify(storageArray));
-        } else localStorage.setItem('cart', JSON.stringify(storageArray));
+        storageArray.splice(idPlacement, 1);
+        localStorage.setItem('cart', JSON.stringify(storageArray));
+      } else if (idPlacement !== null && amount > 0) {
+        storageArray[idPlacement].amount = amount;
+        localStorage.setItem('cart', JSON.stringify(storageArray));
       }
     }
   }

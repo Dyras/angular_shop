@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CartService } from '../cart-service/cart.service';
+import { ProductSaveService } from '../product-save/product-save.service';
 import { IProductSaved } from '../products/product';
 
 @Component({
@@ -15,7 +16,10 @@ export class CheckoutComponent implements OnInit {
     IProductSaved[] | null
   >(null);
   totalItemCost$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private productSaveService: ProductSaveService
+  ) {}
 
   ngOnInit(): void {
     const localStorageContents = JSON.parse(
@@ -25,32 +29,6 @@ export class CheckoutComponent implements OnInit {
 
     this.updateTotalCost();
     document.title = 'Johans webbshop - Kassa';
-  }
-  changeAmount(id: string, amount: number) {
-    const storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
-    if (amount > 0) {
-      for (let i = 0; i < storageArray.length; i++) {
-        if (storageArray[i].id === id) {
-          storageArray[i].amount = amount;
-          localStorage.setItem('cart', JSON.stringify(storageArray));
-          this.itemsInCart$.next(storageArray);
-        }
-      }
-    } else {
-      for (let i = 0; i < storageArray.length; i++) {
-        if (storageArray[i].id === id) {
-          storageArray[i].amount == amount;
-
-          if (storageArray[i].amount <= 0) {
-            storageArray.splice(i, 1);
-          }
-          localStorage.setItem('cart', JSON.stringify(storageArray));
-          this.itemsInCart$.next(storageArray);
-        }
-      }
-    }
-    this.updateTotalCost();
-    this.cartService.currentCart$.next(this.cartService.getCartLength());
   }
 
   updateTotalCost() {
@@ -67,15 +45,8 @@ export class CheckoutComponent implements OnInit {
       this.totalItemCost$.next(0);
     }
   }
-  removeItem(id: string) {
-    const storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
-    for (let i = 0; i < storageArray.length; i++) {
-      if (storageArray[i].id === id) {
-        storageArray.splice(i, 1);
-        localStorage.setItem('cart', JSON.stringify(storageArray));
-        this.itemsInCart$.next(storageArray);
-      }
-    }
+  updateItem(id: IProductSaved, amount: number) {
+    this.productSaveService.updateCart(id, amount);
     this.updateTotalCost();
     this.cartService.currentCart$.next(this.cartService.getCartLength());
   }
