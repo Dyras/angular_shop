@@ -6,13 +6,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from 'firebase/auth';
 
 @Component({
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
+  isEmailTaken = false;
   re = /\S+@\S+\.\S+/;
 
   emailFormControl = new FormControl('', [
@@ -26,11 +31,25 @@ export class RegisterComponent implements OnInit {
     Validators.minLength(8),
   ]);
 
+  isUserLoggedIn: boolean | null = null;
+
   matcher = new MyErrorStateMatcher();
   constructor() {}
 
   ngOnInit(): void {
     document.title = 'Johans webbshop - Registrering';
+
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log('User is logged in');
+        this.isUserLoggedIn = true;
+      } else {
+        console.log('User is not logged in');
+        this.isUserLoggedIn = false;
+      }
+    });
   }
 
   accountHandler() {
@@ -74,12 +93,12 @@ export class RegisterComponent implements OnInit {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // ..
+
+        this.isEmailTaken = true;
       });
   }
 }
