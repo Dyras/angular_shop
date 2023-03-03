@@ -18,6 +18,7 @@ import { PrivacyPageModule } from './bottom-bar/privacy-page/privacy-page.module
 import { BottomBarModule } from './bottom-bar/bottom-bar.module';
 import { ContactModule } from './bottom-bar/contact/contact.module';
 import { AboutModule } from './bottom-bar/about/about.module';
+import { RegisterModule } from './user-handling/register/register.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,6 +36,7 @@ import { AboutModule } from './bottom-bar/about/about.module';
     BottomBarModule,
     ContactModule,
     AboutModule,
+    RegisterModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

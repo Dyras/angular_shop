@@ -7,6 +7,7 @@ import { ProductsPageComponent } from './products-page/products-page.component';
 import { SingleProductComponent } from './singleproduct/singleproduct.component';
 import { ContactComponent } from './bottom-bar/contact/contact.component';
 import { AboutComponent } from './bottom-bar/about/about.component';
+import { RegisterComponent } from './user-handling/register/register.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent,
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
   },
   {
     path: '**',
