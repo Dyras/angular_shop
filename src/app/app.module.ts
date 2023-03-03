@@ -8,7 +8,7 @@ import { HomeModule } from './home/home.module';
 import { ProductsPageModule } from './products-page/products-page.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { environment } from '../environments/environment';
+import { firebaseConfig } from '../environments/environment';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { SingleProductModule } from './singleproduct/singleproduct.module';
@@ -37,7 +37,7 @@ import { RegisterModule } from './user-handling/register/register.module';
     ContactModule,
     AboutModule,
     RegisterModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
   ],
