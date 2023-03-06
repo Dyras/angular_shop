@@ -1,11 +1,6 @@
 <nav>
   <a routerLink="">Framsidan</a>
   <a routerLink="/products">Produkter</a>
-  <a *ngIf="!isUserLoggedIn" routerLink="/register">Registrera konto</a>
-  <a *ngIf="!isUserLoggedIn" routerLink="/login">Logga in</a>
-  <a *ngIf="isUserLoggedIn" href="javascript:void(0)" (click)="logOut()"
-    >Logga ut</a
-  >
   <div *ngIf="badgeNumber == 0; else moreThanZero">
     <a routerLink="/checkout">Varukorg</a>
   </div>
@@ -18,5 +13,18 @@
     >
       Varukorg
     </a>
+    <div class="dropdown">
+      <button class="dropbutton">
+        <i *ngIf="isUserLoggedIn" class="material-icons">person</i>
+        <i *ngIf="!isUserLoggedIn" class="material-icons">person_outline</i>
+      </button>
+      <div class="dropdown-content">
+        <a *ngIf="!isUserLoggedIn" routerLink="/register">Registrera konto</a>
+        <a *ngIf="!isUserLoggedIn" routerLink="/login">Logga in</a>
+        <a *ngIf="isUserLoggedIn" href="javascript:void(0)" (click)="logOut()"
+          >Logga ut</a
+        >
+      </div>
+    </div>
   </ng-template>
 </nav>
