@@ -1,0 +1,53 @@
+<a *ngIf="isUserLoggedIn == true; then userLoggedIn; else userNotLoggedIn"></a>
+
+<ng-template #userLoggedIn> <div>Du är redan inloggad!</div> </ng-template>
+
+<ng-template #userNotLoggedIn>
+  <form class="example-form" (ngSubmit)="loginHandler()">
+    <mat-form-field class="example-full-width">
+      <mat-label>Email</mat-label>
+      <input
+        id="email"
+        type="email"
+        matInput
+        [formControl]="emailFormControl"
+        [errorStateMatcher]="matcher"
+        placeholder="Ex. johan@mail.com"
+      />
+      <mat-error
+        *ngIf="
+          emailFormControl.hasError('pattern') &&
+          !emailFormControl.hasError('required')
+        "
+      >
+        Vänligen skriv in en giltig mejl
+      </mat-error>
+      <mat-error *ngIf="emailFormControl.hasError('required')">
+        Du måste skriva in en <strong>mejl</strong>
+      </mat-error>
+    </mat-form-field>
+    <br />
+    <mat-form-field class="example-full-width">
+      <mat-label>Lösenord</mat-label>
+      <input
+        id="password"
+        type="password"
+        matInput
+        [formControl]="passwordFormControl"
+        [errorStateMatcher]="matcher"
+      />
+
+      <mat-error *ngIf="!passwordFormControl.hasError('required')">
+        Minst {{ passwordLength }} tecken!
+      </mat-error>
+      <mat-error *ngIf="passwordFormControl.hasError('required')">
+        Du måste skriva ett <strong>lösenord</strong>
+      </mat-error>
+    </mat-form-field>
+    <br />
+
+    <button mat-button style="background-color: whitesmoke" type="submit">
+      Registrera
+    </button>
+  </form>
+</ng-template>

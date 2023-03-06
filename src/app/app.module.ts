@@ -19,6 +19,7 @@ import { BottomBarModule } from './bottom-bar/bottom-bar.module';
 import { ContactModule } from './bottom-bar/contact/contact.module';
 import { AboutModule } from './bottom-bar/about/about.module';
 import { RegisterModule } from './user-handling/register/register.module';
+import { LoginModule } from './user-handling/login/login.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,6 +38,7 @@ import { RegisterModule } from './user-handling/register/register.module';
     ContactModule,
     AboutModule,
     RegisterModule,
+    LoginModule,
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

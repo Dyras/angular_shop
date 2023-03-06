@@ -8,6 +8,7 @@ import { SingleProductComponent } from './singleproduct/singleproduct.component'
 import { ContactComponent } from './bottom-bar/contact/contact.component';
 import { AboutComponent } from './bottom-bar/about/about.component';
 import { RegisterComponent } from './user-handling/register/register.component';
+import { LoginComponent } from './user-handling/login/login.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
   },
   {
     path: '**',
