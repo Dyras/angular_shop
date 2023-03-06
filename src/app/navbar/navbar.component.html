@@ -1,7 +1,8 @@
 <nav>
   <a routerLink="">Framsidan</a>
   <a routerLink="/products">Produkter</a>
-  <a routerLink="/register">Registrera</a>
+  <a *ngIf="!isUserLoggedIn" routerLink="/register">Registrera</a>
+  <a *ngIf="!isUserLoggedIn" routerLink="/login">Logga in</a>
   <div *ngIf="badgeNumber == 0; else moreThanZero">
     <a routerLink="/checkout">Varukorg</a>
   </div>
