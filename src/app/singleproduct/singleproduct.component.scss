@@ -5,7 +5,7 @@
   justify-content: space-around;
   align-items: center;
   align-content: center;
-  margin-top: 50px;
+  margin-top: 10px;
 }
 
 mat-card {
@@ -38,4 +38,14 @@ mat-card {
 button {
   background-color: rgb(225, 214, 214);
   color: white;
+}
+
+mat-form-field {
+  width: 20%;
+}
+
+@media only screen and (max-width: 450px) {
+  mat-form-field {
+    width: 40%;
+  }
 }

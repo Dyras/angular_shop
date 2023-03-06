@@ -27,11 +27,16 @@
     </mat-card-actions>
 
     <ng-template #moreThanOne>
-      <mat-card-actions>
-        <button (click)="addToCart(-1)">-</button>
-        <span>{{ howManyInCart }} i korgen</span>
-        <button (click)="addToCart(1)">+</button>
-      </mat-card-actions>
+      <mat-form-field>
+        <mat-select
+          [(value)]="howManyInCart"
+          (selectionChange)="updateItem(product, howManyInCart)"
+        >
+          <mat-option *ngFor="let amount of amountList" [value]="amount">
+            {{ amount }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </ng-template>
   </mat-card>
   <ng-template #notFound>

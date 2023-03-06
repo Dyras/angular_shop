@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CartService } from '../cart-service/cart.service';
 import { ProductSaveService } from '../product-save/product-save.service';
-import { IProduct } from '../products/product';
+import { IProduct, IProductSaved } from '../products/product';
 import { ProductService } from '../products/products.service';
 
 @Component({
@@ -11,6 +11,8 @@ import { ProductService } from '../products/products.service';
   styleUrls: ['./singleproduct.component.scss'],
 })
 export class SingleProductComponent implements OnInit {
+  amountList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   howManyInCart: number = 0;
   defaultObject: IProduct = {
     id: '0',
@@ -62,5 +64,11 @@ export class SingleProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.howManyInCartCheck();
+  }
+
+  updateItem(id: IProduct, amount: number) {
+    this.productSaveService.updateCart(id, amount);
+    this.howManyInCartCheck();
+    this.cartService.currentCart$.next(this.cartService.getCartLength());
   }
 }
