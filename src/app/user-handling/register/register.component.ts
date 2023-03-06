@@ -11,6 +11,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from 'firebase/auth';
+import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
 
 @Component({
   templateUrl: './register.component.html',
@@ -86,18 +87,20 @@ export class RegisterComponent implements OnInit {
   }
 
   createAccount(email: string, password: string) {
-    console.log(email, password);
-
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+        const firestore = getFirestore();
+        setDoc(doc(firestore, 'Users', user.uid), {
+          email: user.email,
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-
+        console.log(errorCode, errorMessage);
         this.isEmailTaken = true;
       });
   }
