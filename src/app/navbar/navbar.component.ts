@@ -32,4 +32,12 @@ export class NavbarComponent {
       }
     });
   }
+
+  logOut() {
+    const auth = getAuth();
+    auth.signOut().then(() => {
+      console.log('User is logged out');
+      this.isUserLoggedIn = false;
+    });
+  }
 }
