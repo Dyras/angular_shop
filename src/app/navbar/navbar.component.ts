@@ -24,10 +24,8 @@ export class NavbarComponent {
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log('User is logged in');
         this.isUserLoggedIn = true;
       } else {
-        console.log('User is not logged in');
         this.isUserLoggedIn = false;
       }
     });

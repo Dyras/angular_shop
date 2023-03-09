@@ -11,7 +11,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { collection, doc, getFirestore, setDoc } from 'firebase/firestore';
+import { doc, getFirestore, setDoc } from 'firebase/firestore';
 
 @Component({
   templateUrl: './register.component.html',
@@ -95,6 +95,7 @@ export class RegisterComponent implements OnInit {
         const firestore = getFirestore();
         setDoc(doc(firestore, 'Users', user.uid), {
           email: user.email,
+          firstSeen: new Date(),
         });
       })
       .catch((error) => {
