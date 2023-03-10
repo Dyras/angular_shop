@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
 import { BehaviorSubject } from 'rxjs';
 import { CartService } from '../cart-service/cart.service';
 import { ProductSaveService } from '../product-save/product-save.service';
@@ -21,18 +23,36 @@ export class CheckoutComponent implements OnInit {
     private productSaveService: ProductSaveService
   ) {}
 
-  ngOnInit(): void {
-    const localStorageContents = JSON.parse(
-      localStorage.getItem('cart') || '[]'
-    );
-    this.itemsInCart$.next(localStorageContents);
-
-    this.updateTotalCost();
-    document.title = 'Johans webbshop - Kassa';
+  async ngOnInit(): Promise<void> {
+    const auth = getAuth();
+    const firestore = getFirestore();
+    let userId = '';
+    let userType = '';
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        userId = user.uid;
+        userType = 'Users';
+      } else {
+        userId = localStorage.getItem('id') || '';
+        userType = 'Temp_Users';
+      }
+      const firestoreCart = await getDoc(doc(firestore, 'Temp_Users', userId));
+      if (firestoreCart) {
+        setTimeout(() => {
+          const firestoreCartData = firestoreCart.data();
+          if (firestoreCartData) {
+            this.itemsInCart$.next(
+              firestoreCartData['cart'] as IProductSaved[]
+            );
+          }
+          this.updateTotalCost();
+        }, 200);
+      }
+    });
   }
 
   updateTotalCost() {
-    const storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
+    const storageArray = this.itemsInCart$.value || [];
     let counter = 0;
     if (storageArray.length !== 0) {
       for (let i = 0; i < storageArray.length; i++) {
@@ -45,9 +65,21 @@ export class CheckoutComponent implements OnInit {
       this.totalItemCost$.next(0);
     }
   }
-  updateItem(id: IProductSaved, amount: number) {
+  async updateItem(id: IProductSaved, amount: number) {
     this.productSaveService.updateCart(id, amount);
     this.updateTotalCost();
-    this.cartService.currentCart$.next(this.cartService.getCartLength());
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        this.cartService.currentCart$.next(
+          await this.cartService.getCartLength(user)
+        );
+      } else {
+        this.cartService.currentCart$.next(
+          await this.cartService.getCartLength(null)
+        );
+      }
+    });
   }
 }

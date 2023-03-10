@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CartService } from '../cart-service/cart.service';
 import { ProductSaveService } from '../product-save/product-save.service';
@@ -47,19 +49,57 @@ export class SingleProductComponent implements OnInit {
       )
     );
     document.title = this.product$.value?.name || 'Produktsida';
+    this.howManyInCartCheck();
   }
 
   addToCart(amount: number) {
     if (this.product$.value !== null) {
       this.productSaveService.updateCart(this.product$.value, amount);
     }
-
-    this.howManyInCartCheck();
+    console.log(this.product$.value);
+    setTimeout(() => {
+      this.howManyInCartCheck();
+    }, 200);
   }
-  howManyInCartCheck() {
+  async howManyInCartCheck() {
     const product = new URL(window.location.href).pathname.split('/')[2];
-    this.howManyInCart = this.productSaveService.localStorageChecker(product);
-    this.cartService.currentCart$.next(this.cartService.getCartLength());
+    const firestore = getFirestore();
+    const auth = getAuth();
+    let fetchedCartData: IProductSaved[] = [];
+    console.log('Testing');
+    if (auth.currentUser != null) {
+      console.log('Testing 1');
+      const fetchedCart = await getDoc(
+        doc(firestore, 'Users', auth.currentUser?.uid)
+      );
+      console.log('Does the cart exist?', fetchedCart.exists());
+      if (fetchedCart.exists()) {
+        console.log('Testing 2');
+        fetchedCartData = fetchedCart.data()['cart'] || [];
+      }
+
+      for (let i = 0; i < fetchedCartData.length; i++) {
+        console.log('Product id:', fetchedCartData[i].id);
+        if (fetchedCartData[i].id === product) {
+          this.howManyInCart = fetchedCartData[i].amount;
+          console.log('How many in cart:', this.howManyInCart);
+          console.log('How many in firestore:', fetchedCartData[i].amount);
+          console.log('Testing 3');
+
+          onAuthStateChanged(auth, async (user) => {
+            if (user) {
+              this.cartService.currentCart$.next(
+                await this.cartService.getCartLength(user)
+              );
+            } else {
+              this.cartService.currentCart$.next(
+                await this.cartService.getCartLength(null)
+              );
+            }
+          });
+        }
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -67,8 +107,10 @@ export class SingleProductComponent implements OnInit {
   }
 
   updateItem(id: IProduct, amount: number) {
+    console.log('Data: ', id, amount);
     this.productSaveService.updateCart(id, amount);
-    this.howManyInCartCheck();
-    this.cartService.currentCart$.next(this.cartService.getCartLength());
+    setTimeout(() => {
+      this.howManyInCartCheck();
+    }, 200);
   }
 }

@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { getAuth } from 'firebase/auth';
+import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 import { IProduct, IProductSaved } from '../products/product';
 
 @Injectable({
@@ -7,28 +9,36 @@ import { IProduct, IProductSaved } from '../products/product';
 export class ProductSaveService {
   constructor() {}
 
-  updateCart(product: IProduct, amount: number) {
-    console.log(product, amount);
+  //
+  async updateCart(product: IProduct, amount: number) {
+    const firestore = getFirestore();
+    const auth = getAuth();
+    let matchFound = false;
+    // WIP - Update Firestore cart
     if (product.id !== '0') {
-      let storageArray: IProductSaved[];
-      storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
-      let idPlacement = null;
-      for (let i = 0; i < storageArray.length; i++) {
-        if (storageArray[i].id === product.id) {
-          idPlacement = i;
-        }
-      }
+      if (auth.currentUser != null) {
+        const firestoreCart = await getDoc(
+          doc(firestore, 'Users', auth.currentUser.uid)
+        );
+        if (firestoreCart.exists()) {
+          const firestoreCartData = firestoreCart.data()['cart'] || [];
 
-      if (idPlacement == null) {
-        storageArray.push({ ...product, amount: amount });
-        console.log(storageArray);
-        localStorage.setItem('cart', JSON.stringify(storageArray));
-      } else if (idPlacement !== null && amount < 0) {
-        storageArray.splice(idPlacement, 1);
-        localStorage.setItem('cart', JSON.stringify(storageArray));
-      } else if (idPlacement !== null && amount > 0) {
-        storageArray[idPlacement].amount = amount;
-        localStorage.setItem('cart', JSON.stringify(storageArray));
+          for (let i = 0; i < firestoreCartData.length; i++) {
+            if (firestoreCartData[i].id === product.id) {
+              firestoreCartData[i].amount = amount;
+              setDoc(doc(firestore, 'Users', auth.currentUser.uid), {
+                cart: firestoreCartData,
+              });
+              matchFound = true;
+            }
+          }
+          if (!matchFound) {
+            firestoreCartData.push({ ...product, amount: amount });
+            setDoc(doc(firestore, 'Users', auth.currentUser.uid), {
+              cart: firestoreCartData,
+            });
+          }
+        }
       }
     }
   }

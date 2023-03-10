@@ -14,19 +14,24 @@ export class NavbarComponent {
 
   constructor(private cartService: CartService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.cartService.currentCart$.subscribe((value) => {
       this.badgeNumber = value;
     });
-    this.cartService.currentCart$.next(this.cartService.getCartLength());
 
     const auth = getAuth();
 
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
         this.isUserLoggedIn = true;
+        this.cartService.currentCart$.next(
+          await this.cartService.getCartLength(user)
+        );
       } else {
         this.isUserLoggedIn = false;
+        this.cartService.currentCart$.next(
+          await this.cartService.getCartLength(null)
+        );
       }
     });
   }
@@ -34,7 +39,7 @@ export class NavbarComponent {
   logOut() {
     const auth = getAuth();
     auth.signOut().then(() => {
-      console.log('User is logged out');
+      console.log('User logged out');
       this.isUserLoggedIn = false;
     });
   }

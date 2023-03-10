@@ -7,6 +7,7 @@ import {
   query,
   doc,
   getDoc,
+  QuerySnapshot,
 } from '@angular/fire/firestore';
 import { IProduct } from './product';
 
@@ -53,15 +54,19 @@ export class ProductService {
   async getProducts(): Promise<IProduct[]> {
     const q = query(this.ref, limit(8));
 
-    const products = await getDocs(q)
-      .then((snapshot) => {
-        return snapshot.docs.map((doc) => doc.data() as IProduct);
-      })
-      .catch((error) => {
-        console.log('Firestore error: ', error);
+    const productsGet = await getDocs(q).catch((error) => {
+      console.log('Firestore error: ', error);
+    });
+
+    if (productsGet) {
+      var product = productsGet.docs.map((doc) => doc.data() as IProduct);
+      product = product.map((product) => {
+        product.name = product.name.replace(' ', ' ');
+        return product;
       });
-    if (products) return products;
-    else return this.productList;
+
+      return product;
+    } else return this.productList;
   }
 
   async getSingleProduct(id: string): Promise<IProduct | null> {
