@@ -99,7 +99,7 @@ export class SingleProductComponent implements OnInit {
     console.log('Data: ', id, amount);
     this.productSaveService.updateCart(id, amount);
     setTimeout(() => {
-      this.howManyInCartCheck(null);
+      this.howManyInCartCheck(amount);
     }, 200);
   }
 

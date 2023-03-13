@@ -10,59 +10,73 @@ export class ProductSaveService {
   constructor() {}
 
   //
+
   async updateCart(product: IProduct, amount: number) {
-    const firestore = getFirestore();
     const auth = getAuth();
+    const productId = product.id;
+    let currentUser = '';
+    let productType: string = '';
     let matchFound = false;
-    const tempUser = localStorage.getItem('id') || '';
+    if (productId !== '0') {
+      switch (auth.currentUser?.uid) {
+        case null:
+          productType = 'Temp_Users';
+          currentUser = localStorage.getItem('id') || '';
+          break;
 
-    if (product.id !== '0') {
-      if (auth.currentUser != null) {
-        const firestoreCart = await getDoc(
-          doc(firestore, 'Users', auth.currentUser.uid)
-        );
-        if (firestoreCart.exists()) {
-          const firestoreCartData = firestoreCart.data()['cart'] || [];
+        case undefined:
+          productType = 'Temp_Users';
+          currentUser = localStorage.getItem('id') || '';
+          break;
 
+        default:
+          productType = 'Users';
+          if (auth.currentUser != null) currentUser = auth.currentUser.uid;
+          break;
+      }
+      console.log(productType, 'productType');
+      console.log(currentUser, 'currentUser');
+      const firestoreCartData = await this.fetchCart(
+        currentUser,
+        productType
+      ).catch((err) => {
+        console.log('Error ', err);
+      });
+
+      console.log(firestoreCartData, 'firestoreCartData');
+      if (firestoreCartData != null) {
+        console.log(firestoreCartData, 'length');
+        if (firestoreCartData.length !== 0) {
           for (let i = 0; i < firestoreCartData.length; i++) {
             if (firestoreCartData[i].id === product.id) {
               firestoreCartData[i].amount = amount;
-              setDoc(doc(firestore, 'Users', auth.currentUser.uid), {
+              matchFound = true;
+              console.log('matchFound', matchFound);
+              setDoc(doc(getFirestore(), productType, currentUser), {
                 cart: firestoreCartData,
               });
-              matchFound = true;
             }
-          }
-          if (!matchFound) {
-            firestoreCartData.push({ ...product, amount: amount });
-            setDoc(doc(firestore, 'Users', auth.currentUser.uid), {
-              cart: firestoreCartData,
-            });
-          }
-        }
-      } else {
-        const firestoreCart = await getDoc(
-          doc(firestore, 'Temp_Users', tempUser || '')
-        );
-        if (firestoreCart.exists()) {
-          const firestoreCartData = firestoreCart.data()['cart'];
-          for (let i = 0; i < firestoreCartData.length; i++) {
-            if (firestoreCartData[i].id === product.id) {
-              firestoreCartData[i].amount = amount;
-              setDoc(doc(firestore, 'Temp_Users', tempUser), {
-                cart: firestoreCartData,
-              });
-              matchFound = true;
-            }
-          }
-          if (!matchFound) {
-            firestoreCartData.push({ ...product, amount: amount });
-            setDoc(doc(firestore, 'Temp_Users', tempUser), {
-              cart: firestoreCartData,
-            });
           }
         }
       }
+
+      if (!matchFound) {
+        firestoreCartData.push({ ...product, amount: amount });
+        setDoc(doc(getFirestore(), productType, currentUser), {
+          cart: firestoreCartData,
+        });
+      }
+    }
+  }
+
+  async fetchCart(productId: string, productType: string) {
+    const firestore = getFirestore();
+    console.log(productId, productType);
+    const document =
+      (await getDoc(doc(firestore, productType, productId))) || [];
+    if (document.exists()) {
+      console.log(document.data(), 'document.data()', document);
+      return document.data()['cart'] || [];
     }
   }
 }
