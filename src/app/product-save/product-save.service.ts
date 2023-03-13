@@ -65,14 +65,4 @@ export class ProductSaveService {
       }
     }
   }
-
-  localStorageChecker(id: string): number {
-    const storageArray = JSON.parse(localStorage.getItem('cart') || '[]');
-    for (let i = 0; i < storageArray.length; i++) {
-      if (storageArray[i].id === id) {
-        return storageArray[i].amount;
-      }
-    }
-    return 0;
-  }
 }
