@@ -14,7 +14,8 @@ export class ProductSaveService {
     const firestore = getFirestore();
     const auth = getAuth();
     let matchFound = false;
-    // WIP - Update Firestore cart
+    const tempUser = localStorage.getItem('id') || '';
+
     if (product.id !== '0') {
       if (auth.currentUser != null) {
         const firestoreCart = await getDoc(
@@ -35,6 +36,28 @@ export class ProductSaveService {
           if (!matchFound) {
             firestoreCartData.push({ ...product, amount: amount });
             setDoc(doc(firestore, 'Users', auth.currentUser.uid), {
+              cart: firestoreCartData,
+            });
+          }
+        }
+      } else {
+        const firestoreCart = await getDoc(
+          doc(firestore, 'Temp_Users', tempUser || '')
+        );
+        if (firestoreCart.exists()) {
+          const firestoreCartData = firestoreCart.data()['cart'];
+          for (let i = 0; i < firestoreCartData.length; i++) {
+            if (firestoreCartData[i].id === product.id) {
+              firestoreCartData[i].amount = amount;
+              setDoc(doc(firestore, 'Temp_Users', tempUser), {
+                cart: firestoreCartData,
+              });
+              matchFound = true;
+            }
+          }
+          if (!matchFound) {
+            firestoreCartData.push({ ...product, amount: amount });
+            setDoc(doc(firestore, 'Temp_Users', tempUser), {
               cart: firestoreCartData,
             });
           }

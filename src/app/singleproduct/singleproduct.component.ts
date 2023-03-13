@@ -49,7 +49,7 @@ export class SingleProductComponent implements OnInit {
       )
     );
     document.title = this.product$.value?.name || 'Produktsida';
-    this.howManyInCartCheck();
+    this.howManyInCartCheck(null);
   }
 
   addToCart(amount: number) {
@@ -57,66 +57,60 @@ export class SingleProductComponent implements OnInit {
       this.productSaveService.updateCart(this.product$.value, amount);
     }
     console.log(this.product$.value);
-    setTimeout(() => {
-      this.howManyInCartCheck();
-    }, 200);
+    this.howManyInCart = amount;
   }
-  async howManyInCartCheck() {
-    const product = new URL(window.location.href).pathname.split('/')[2];
-    const firestore = getFirestore();
-    const auth = getAuth();
-    let fetchedCartData: IProductSaved[] = [];
-    console.log('Testing');
-    console.log(auth.currentUser);
-    if (auth.currentUser != null) {
-      console.log('Testing 1');
-      const fetchedCart = await getDoc(
-        doc(firestore, 'Users', auth.currentUser?.uid)
-      );
-      console.log('Does the cart exist?', fetchedCart.exists());
-      if (fetchedCart.exists()) {
-        console.log('Testing 2');
-        fetchedCartData = fetchedCart.data()['cart'] || [];
-      }
+  async howManyInCartCheck(amount: number | null) {
+    if (amount !== null) {
+      this.howManyInCart = amount;
+    } else {
+      const product = new URL(window.location.href).pathname.split('/')[2];
+      const auth = getAuth();
+      const tempUser = localStorage.getItem('id') || '';
+      let fetchedCartData: IProductSaved[] = [];
 
-      for (let i = 0; i < fetchedCartData.length; i++) {
-        console.log('Product id:', fetchedCartData[i].id);
-        if (fetchedCartData[i].id === product) {
-          this.howManyInCart = fetchedCartData[i].amount;
-          console.log('How many in cart:', this.howManyInCart);
-          console.log('How many in firestore:', fetchedCartData[i].amount);
-          console.log('Testing 3');
-
-          onAuthStateChanged(auth, async (user) => {
-            if (user) {
-              this.cartService.currentCart$.next(
-                await this.cartService.getCartLength(user)
-              );
-            } else {
-              this.cartService.currentCart$.next(
-                await this.cartService.getCartLength(null)
-              );
+      if (auth.currentUser != null) {
+        const currentUser = auth.currentUser.uid;
+        const fetchedCart = await this.fetchCart(currentUser, 'Users');
+        if (fetchedCart != null) {
+          for (let i = 0; i < fetchedCart.length; i++) {
+            if (fetchedCart[i].id === product) {
+              this.howManyInCart = fetchedCart[i].amount;
             }
-          });
+          }
+        }
+      } else {
+        const currentUser = tempUser;
+        const fetchedCart = await this.fetchCart(currentUser, 'Temp_Users');
+
+        for (let i = 0; i < fetchedCart.length; i++) {
+          if (fetchedCart[i].id === product) {
+            this.howManyInCart = fetchedCart[i].amount;
+          }
         }
       }
-    } else {
-      const tempUser = localStorage.getItem('id');
-      const fetchedCart = await getDoc(
-        doc(firestore, 'Temp_Users', tempUser || '0')
-      );
     }
   }
 
   ngOnInit(): void {
-    this.howManyInCartCheck();
+    this.howManyInCartCheck(null);
   }
 
   updateItem(id: IProduct, amount: number) {
     console.log('Data: ', id, amount);
     this.productSaveService.updateCart(id, amount);
     setTimeout(() => {
-      this.howManyInCartCheck();
+      this.howManyInCartCheck(null);
     }, 200);
+  }
+
+  async fetchCart(userId: string, userType: string): Promise<IProductSaved[]> {
+    const firestore = getFirestore();
+    const fetchedCart = await getDoc(doc(firestore, userType, userId));
+
+    if (fetchedCart.exists()) {
+      return fetchedCart.data()['cart'];
+    } else {
+      return [];
+    }
   }
 }
