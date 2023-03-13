@@ -11,6 +11,7 @@ export class CartService {
   currentCartValue = 0;
   currentCart$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   constructor() {}
+
   async getCartLength(user: User | null) {
     const firestore = getFirestore();
     let currentArray: DocumentData = [];
@@ -31,6 +32,12 @@ export class CartService {
       const fetchedProducts = await getDoc(
         doc(firestore, 'Temp_Users', localStorage.getItem('id') || '')
       );
+
+      currentArray = fetchedProducts.data() || [];
+      const finalArray = currentArray['cart'] as IProductSaved[];
+      for (let i = 0; i < finalArray.length; i++) {
+        this.currentCartValue += finalArray[i].amount;
+      }
       return this.currentCartValue;
     }
   }
