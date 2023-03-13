@@ -36,7 +36,7 @@ export class FirestoreUserHandlerService {
 
         console.log('User', user);
         if (user != null) {
-          const ref = doc(firestore, 'Temp_User', user);
+          const ref = doc(firestore, 'Temp_Users', user);
           const docSnap = await getDoc(ref);
           if (docSnap.exists()) {
             localStorage.setItem(
@@ -44,7 +44,7 @@ export class FirestoreUserHandlerService {
               JSON.stringify(docSnap.data()['cart'])
             );
           } else {
-            setDoc(doc(firestore, 'Temp_User', user), {
+            setDoc(doc(firestore, 'Temp_Users', user), {
               user: user,
               firstSeen: new Date(),
               cart: [],

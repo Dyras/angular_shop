@@ -67,6 +67,7 @@ export class SingleProductComponent implements OnInit {
     const auth = getAuth();
     let fetchedCartData: IProductSaved[] = [];
     console.log('Testing');
+    console.log(auth.currentUser);
     if (auth.currentUser != null) {
       console.log('Testing 1');
       const fetchedCart = await getDoc(
@@ -99,6 +100,11 @@ export class SingleProductComponent implements OnInit {
           });
         }
       }
+    } else {
+      const tempUser = localStorage.getItem('id');
+      const fetchedCart = await getDoc(
+        doc(firestore, 'Temp_Users', tempUser || '0')
+      );
     }
   }
 
