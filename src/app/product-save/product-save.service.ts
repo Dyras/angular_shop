@@ -18,24 +18,16 @@ export class ProductSaveService {
     let productType: string = '';
     let matchFound = false;
     if (productId !== '0') {
-      switch (auth.currentUser?.uid) {
-        case null:
-          productType = 'Temp_Users';
-          currentUser = localStorage.getItem('id') || '';
-          break;
+      if (auth.currentUser?.uid !== undefined) {
+        productType = 'Users';
 
-        case undefined:
-          productType = 'Temp_Users';
-          currentUser = localStorage.getItem('id') || '';
-          break;
+        currentUser = auth.currentUser?.uid;
+      } else {
+        productType = 'Temp_Users';
 
-        default:
-          productType = 'Users';
-          if (auth.currentUser != null) currentUser = auth.currentUser.uid;
-          break;
+        currentUser = localStorage.getItem('id') || '';
       }
-      console.log(productType, 'productType');
-      console.log(currentUser, 'currentUser');
+
       const firestoreCartData = await this.fetchCart(
         currentUser,
         productType
@@ -43,15 +35,12 @@ export class ProductSaveService {
         console.log('Error ', err);
       });
 
-      console.log(firestoreCartData, 'firestoreCartData');
       if (firestoreCartData != null) {
-        console.log(firestoreCartData, 'length');
         if (firestoreCartData.length !== 0) {
           for (let i = 0; i < firestoreCartData.length; i++) {
             if (firestoreCartData[i].id === product.id) {
               firestoreCartData[i].amount = amount;
               matchFound = true;
-              console.log('matchFound', matchFound);
               setDoc(doc(getFirestore(), productType, currentUser), {
                 cart: firestoreCartData,
               });
@@ -71,11 +60,9 @@ export class ProductSaveService {
 
   async fetchCart(productId: string, productType: string) {
     const firestore = getFirestore();
-    console.log(productId, productType);
     const document =
       (await getDoc(doc(firestore, productType, productId))) || [];
     if (document.exists()) {
-      console.log(document.data(), 'document.data()', document);
       return document.data()['cart'] || [];
     }
   }

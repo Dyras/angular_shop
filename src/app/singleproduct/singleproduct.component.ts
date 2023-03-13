@@ -66,7 +66,6 @@ export class SingleProductComponent implements OnInit {
       const product = new URL(window.location.href).pathname.split('/')[2];
       const auth = getAuth();
       const tempUser = localStorage.getItem('id') || '';
-      let fetchedCartData: IProductSaved[] = [];
 
       if (auth.currentUser != null) {
         const currentUser = auth.currentUser.uid;
@@ -92,7 +91,11 @@ export class SingleProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.howManyInCartCheck(null);
+    // If this is the first page you visit, Firestore will not have loaded yet.
+    // This fixes that
+    setTimeout(() => {
+      this.howManyInCartCheck(null);
+    }, 100);
   }
 
   updateItem(id: IProduct, amount: number) {
