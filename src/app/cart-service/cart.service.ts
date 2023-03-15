@@ -15,6 +15,7 @@ export class CartService {
   async getCartLength(user: User | null) {
     const firestore = getFirestore();
     let currentArray: DocumentData = [];
+    this.currentCartValue = 0;
 
     if (user != null) {
       const fetchedProducts = await getDoc(doc(firestore, 'Users', user.uid));
@@ -26,7 +27,6 @@ export class CartService {
           this.currentCartValue += finalArray[i].amount;
         }
       }
-
       return this.currentCartValue;
     } else {
       const fetchedProducts = await getDoc(
