@@ -36,7 +36,7 @@ export class CheckoutComponent implements OnInit {
         userId = localStorage.getItem('id') || '';
         userType = 'Temp_Users';
       }
-      const firestoreCart = await getDoc(doc(firestore, 'Temp_Users', userId));
+      const firestoreCart = await getDoc(doc(firestore, userType, userId));
       if (firestoreCart) {
         setTimeout(() => {
           const firestoreCartData = firestoreCart.data();
@@ -59,6 +59,7 @@ export class CheckoutComponent implements OnInit {
         counter += storageArray[i].amount * storageArray[i].price;
         if (i == storageArray.length - 1) {
           this.totalItemCost$.next(counter);
+          this.zeroCheck = counter;
         }
       }
     } else {
