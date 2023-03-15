@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { CartService } from '../cart-service/cart.service';
 import { ProductSaveService } from '../product-save/product-save.service';
 import { IProduct, IProductSaved } from '../products/product';
