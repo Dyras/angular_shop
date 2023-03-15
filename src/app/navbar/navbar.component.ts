@@ -15,7 +15,8 @@ export class NavbarComponent {
   constructor(private cartService: CartService) {}
 
   async ngOnInit(): Promise<void> {
-    this.cartService.currentCart$.subscribe((value) => {
+    this.cartService.currentCartTotalAmount$.subscribe((value) => {
+      console.log('BadgeNumber:', value);
       this.badgeNumber = value;
     });
 
@@ -24,13 +25,13 @@ export class NavbarComponent {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         this.isUserLoggedIn = true;
-        this.cartService.currentCart$.next(
-          await this.cartService.getCartLength(user)
+        this.cartService.currentCartTotalAmount$.next(
+          await this.cartService.setCartLength(null)
         );
       } else {
         this.isUserLoggedIn = false;
-        this.cartService.currentCart$.next(
-          await this.cartService.getCartLength(null)
+        this.cartService.currentCartTotalAmount$.next(
+          await this.cartService.setCartLength(null)
         );
       }
     });

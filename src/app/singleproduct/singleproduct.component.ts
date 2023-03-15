@@ -53,6 +53,7 @@ export class SingleProductComponent implements OnInit {
 
   addToCart(amount: number) {
     if (this.product$.value !== null) {
+      console.log('Den här delen körs');
       this.productSaveService.updateCart(this.product$.value, amount);
     }
     console.log(this.product$.value);
@@ -63,37 +64,39 @@ export class SingleProductComponent implements OnInit {
   }
 
   async howManyInCartCheck(amount: number | null) {
-    let fetchedCart: IProductSaved[] = [];
+    this.cartService.currentCartContents$.subscribe((value) => {
+      for (let i = 0; i < value?.length; i++) {
+        if (value[i].id === this.product$.value?.id) {
+          this.howManyInCart = value[i].amount;
+        }
+      }
+    });
     if (amount === null) {
       amount = 0;
     }
-    console.log('Amount:', amount);
     this.howManyInCart = amount;
     const product = new URL(window.location.href).pathname.split('/')[2];
     const auth = getAuth();
 
     if (auth.currentUser != null) {
-      fetchedCart = await this.fetchCart(this.productSaveService.checkUser());
-
-      if (fetchedCart != null) {
-        for (let i = 0; i < fetchedCart.length; i++) {
-          if (fetchedCart[i].id === product) {
-            this.howManyInCart = fetchedCart[i].amount;
+      let workingName = this.cartService.currentCartContents$.value;
+      if (workingName != null) {
+        for (let i = 0; i < workingName.length; i++) {
+          if (workingName[i].id === product) {
+            this.howManyInCart = workingName[i].amount;
           }
         }
       }
     } else {
-      fetchedCart = await this.fetchCart(this.productSaveService.checkUser());
-
-      for (let i = 0; i < fetchedCart.length; i++) {
-        if (fetchedCart[i].id === product) {
-          this.howManyInCart = fetchedCart[i].amount;
+      let workingName = this.cartService.currentCartContents$.value;
+      if (workingName != null) {
+        for (let i = 0; i < workingName.length; i++) {
+          if (workingName[i].id === product) {
+            this.howManyInCart = workingName[i].amount;
+          }
         }
       }
     }
-    setTimeout(() => {
-      this.updateTotal(fetchedCart);
-    });
   }
 
   ngOnInit(): void {
@@ -104,14 +107,10 @@ export class SingleProductComponent implements OnInit {
     }, 100);
   }
 
-  updateItem(id: IProduct, amount: number) {
-    console.log('Amount: ', amount);
-    this.productSaveService.updateCart(id, amount);
+  addNewProduct(product: IProduct, amount: number) {
+    this.productSaveService.updateCart(product, amount);
     this.howManyInCart = amount;
-    // This is a hacky way to make sure the cart is updated before the cart is checked.
-    setTimeout(() => {
-      this.howManyInCartCheck(amount);
-    }, 500);
+    this.cartService.setCartLength({ ...product, amount: amount });
   }
 
   async fetchCart(currentUser: {
@@ -133,11 +132,12 @@ export class SingleProductComponent implements OnInit {
   }
 
   updateTotal(cartData: IProductSaved[]) {
+    console.log('Nu kör vi boys!');
     let total = 0;
     for (let i = 0; i < cartData.length; i++) {
       total += cartData[i].amount;
     }
     console.log('Total: ', total);
-    this.cartService.currentCart$.next(total);
+    this.cartService.currentCartTotalAmount$.next(total);
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { getAuth } from 'firebase/auth';
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
-import { IProduct, IProductSaved } from '../products/product';
+import { IProduct } from '../products/product';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +38,6 @@ export class ProductSaveService {
     }
 
     if (!matchFound) {
-      console.log('Match not found');
       firestoreCartData.push({ ...product, amount: amount });
       setDoc(doc(getFirestore(), currentUser.type, currentUser.uid), {
         cart: firestoreCartData,

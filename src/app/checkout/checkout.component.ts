@@ -73,12 +73,12 @@ export class CheckoutComponent implements OnInit {
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        this.cartService.currentCart$.next(
-          await this.cartService.getCartLength(user)
+        this.cartService.currentCartTotalAmount$.next(
+          await this.cartService.setCartLength(id)
         );
       } else {
-        this.cartService.currentCart$.next(
-          await this.cartService.getCartLength(null)
+        this.cartService.currentCartTotalAmount$.next(
+          await this.cartService.setCartLength(id)
         );
       }
     });
