@@ -73,13 +73,9 @@ export class CheckoutComponent implements OnInit {
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        this.cartService.currentCartTotalAmount$.next(
-          await this.cartService.setCartLength(id)
-        );
+        this.cartService.setCartLength(id);
       } else {
-        this.cartService.currentCartTotalAmount$.next(
-          await this.cartService.setCartLength(id)
-        );
+        this.cartService.setCartLength(id);
       }
     });
   }

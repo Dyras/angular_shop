@@ -14,7 +14,7 @@ export class FirestoreUserHandlerService {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         console.log('User is logged in');
-        await this.cartService.setCartLength(null);
+        this.cartService.setCartLength(null);
 
         this.idCreator();
       } else {
@@ -23,9 +23,8 @@ export class FirestoreUserHandlerService {
           !localStorage.getItem('id')
         ) {
           this.idCreator();
-          this.cartService.currentCartTotalAmount$.next(
-            await this.cartService.setCartLength(null)
-          );
+
+          this.cartService.setCartLength(null);
         }
         const user = localStorage.getItem('id');
 

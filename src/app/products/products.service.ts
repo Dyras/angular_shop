@@ -7,7 +7,6 @@ import {
   query,
   doc,
   getDoc,
-  QuerySnapshot,
 } from '@angular/fire/firestore';
 import { IProduct } from './product';
 

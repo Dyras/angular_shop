@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { getAuth } from 'firebase/auth';
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
-import { IProduct } from '../products/product';
+import { IProduct, IProductSaved } from '../products/product';
 
 @Injectable({
   providedIn: 'root',
@@ -50,7 +50,7 @@ export class ProductSaveService {
     const document =
       (await getDoc(doc(firestore, productType, productId))) || [];
     if (document.exists()) {
-      return document.data()['cart'] || [];
+      return document.data()['cart'] || ([] as IProductSaved[]);
     }
   }
 
@@ -71,5 +71,22 @@ export class ProductSaveService {
     }
     console.log('Current User: ', currentUser);
     return currentUser;
+  }
+
+  async removeFromCart(product: IProduct | null) {
+    console.log('Körs!');
+    if (product != null) {
+      let currentUser = this.checkUser();
+      let firestoreCartData = await this.fetchCart(
+        currentUser.type,
+        currentUser.uid
+      );
+      firestoreCartData = firestoreCartData.filter(
+        (item: IProductSaved) => item.id !== product.id
+      );
+      setDoc(doc(getFirestore(), currentUser.type, currentUser.uid), {
+        cart: firestoreCartData,
+      });
+    }
   }
 }

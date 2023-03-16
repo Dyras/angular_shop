@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatCardModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatBadgeModule,
   ],
   exports: [SingleProductComponent],
   declarations: [SingleProductComponent],

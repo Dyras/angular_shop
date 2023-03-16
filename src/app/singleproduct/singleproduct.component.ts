@@ -42,6 +42,14 @@ export class SingleProductComponent implements OnInit {
     this.fetchProducts();
   }
 
+  ngOnInit(): void {
+    // If this is the first page you visit, Firestore will not have loaded yet.
+    // This fixes that by waiting 100ms before checking how many items are in the cart.
+    setTimeout(() => {
+      this.howManyInCartCheck(null);
+    }, 100);
+  }
+
   async fetchProducts() {
     this.product$.next(
       await this.productService.getSingleProduct(
@@ -51,16 +59,20 @@ export class SingleProductComponent implements OnInit {
     document.title = this.product$.value?.name || 'Produktsida';
   }
 
-  addToCart(amount: number) {
+  // This function is called when the user clicks the "Add to cart" button.
+  async addToCart(amount: number) {
     if (this.product$.value !== null) {
-      console.log('Den här delen körs');
       this.productSaveService.updateCart(this.product$.value, amount);
     }
     console.log(this.product$.value);
     this.howManyInCart = amount;
-    setTimeout(() => {
-      this.fetchCart(this.productSaveService.checkUser());
-    });
+
+    if (this.product$.value !== null) {
+      this.cartService.setCartLength({
+        ...this.product$.value,
+        amount: amount,
+      });
+    }
   }
 
   async howManyInCartCheck(amount: number | null) {
@@ -74,7 +86,7 @@ export class SingleProductComponent implements OnInit {
     if (amount === null) {
       amount = 0;
     }
-    this.howManyInCart = amount;
+
     const product = new URL(window.location.href).pathname.split('/')[2];
     const auth = getAuth();
 
@@ -99,15 +111,7 @@ export class SingleProductComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {
-    // If this is the first page you visit, Firestore will not have loaded yet.
-    // This fixes that by waiting 100ms before checking how many items are in the cart.
-    setTimeout(() => {
-      this.howManyInCartCheck(null);
-    }, 100);
-  }
-
-  addNewProduct(product: IProduct, amount: number) {
+  changeProductAmount(product: IProduct, amount: number) {
     this.productSaveService.updateCart(product, amount);
     this.howManyInCart = amount;
     this.cartService.setCartLength({ ...product, amount: amount });
@@ -123,7 +127,6 @@ export class SingleProductComponent implements OnInit {
     );
 
     if (fetchedCart.exists()) {
-      console.log('FetchedCart: ', fetchedCart.data()['cart']);
       return fetchedCart.data()['cart'];
     } else {
       console.log('No such document!');
@@ -132,12 +135,18 @@ export class SingleProductComponent implements OnInit {
   }
 
   updateTotal(cartData: IProductSaved[]) {
-    console.log('Nu kör vi boys!');
     let total = 0;
     for (let i = 0; i < cartData.length; i++) {
       total += cartData[i].amount;
     }
-    console.log('Total: ', total);
     this.cartService.currentCartTotalAmount$.next(total);
+  }
+
+  removeFromCart(product: IProduct) {
+    this.productSaveService.removeFromCart(product);
+    this.howManyInCart = 0;
+
+    if (this.product$.value !== null)
+      this.cartService.setCartLength({ ...product, amount: -1 });
   }
 }

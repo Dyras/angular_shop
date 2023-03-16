@@ -48,15 +48,37 @@ export class CartService {
       user = localStorage.getItem('id') || null;
       userType = 'Temp_Users';
     }
+    let presentInCart = false;
 
-    if (this.currentCartContents$.value[0].id === '0') {
-      {
-        const fetchedArray = (
-          await getDoc(doc(getFirestore(), userType, user || ''))
-        ).data();
-        if (fetchedArray) {
-          currentArray = fetchedArray['cart'] as IProductSaved[];
+    for (let i = 0; i < this.currentCartContents$.value.length; i++) {
+      if (this.currentCartContents$.value[i].id === product?.id) {
+        console.log('Looking for ID');
+        presentInCart = true;
+      }
+    }
+    console.log('Present in cart:', presentInCart);
+    console.log('Product:', product);
+    // Remove item from cart
+    if (product !== null && product.amount === -1) {
+      console.log('remove');
+      for (let i = 0; i < this.currentCartContents$.value.length; i++) {
+        if (this.currentCartContents$.value[i].id === product.id) {
+          this.currentCartContents$.value.splice(i, 1);
+          for (let i = 0; i < this.currentCartContents$.value.length; i++) {
+            newValue += this.currentCartContents$.value[i].amount;
+          }
+          this.currentCartValue = newValue;
         }
+      }
+    }
+    // First time loading cart
+    if (this.currentCartContents$.value[0].id === '0') {
+      console.log('first time');
+      const fetchedArray = (
+        await getDoc(doc(getFirestore(), userType, user || ''))
+      ).data();
+      if (fetchedArray) {
+        currentArray = fetchedArray['cart'] as IProductSaved[];
       }
 
       this.currentCartContents$.next(currentArray);
@@ -65,11 +87,26 @@ export class CartService {
           newValue += this.currentCartContents$.value[i].amount;
         }
       }
-      return newValue;
-    } else if (this.currentCartContents$.value.length !== 0) {
+      this.currentCartValue = newValue;
+    } else if (!presentInCart) {
+      console.log('add');
+      if (product) {
+        this.currentCartContents$.value.push(product);
+      }
+      for (let i = 0; i < this.currentCartContents$.value.length; i++) {
+        newValue += this.currentCartContents$.value[i].amount;
+      }
+      console.log('New value:', newValue);
+      console.log('Current value:', this.currentCartValue);
+      this.currentCartTotalAmount$.next(newValue);
+    }
+    // Update the cart
+    else if (this.currentCartContents$.value.length !== 0 && presentInCart) {
+      console.log('update');
       let currentArray = this.currentCartContents$.value;
       for (let i = 0; i < currentArray.length; i++) {
         if (currentArray[i].id === product?.id) {
+          console.log('Looking for ID');
           currentArray[i].amount = product.amount;
         }
       }
@@ -77,12 +114,7 @@ export class CartService {
         newValue += currentArray[i].amount;
       }
       this.currentCartContents$.next(currentArray);
-      return newValue;
-    } else {
-      if (product) {
-        this.currentCartContents$.value.push(product);
-      }
-      return product?.amount || 0;
+      this.currentCartValue = newValue;
     }
   }
 }

@@ -30,13 +30,20 @@
       <mat-form-field>
         <mat-select
           [(value)]="howManyInCart"
-          (selectionChange)="addNewProduct(product, howManyInCart)"
+          (selectionChange)="changeProductAmount(product, howManyInCart)"
         >
           <mat-option *ngFor="let amount of amountList" [value]="amount">
             {{ amount }}
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <button
+        class="removeButton"
+        type="button"
+        (click)="removeFromCart(product)"
+      >
+        <i class="material-icons">highlight_remove</i>
+      </button>
     </ng-template>
   </mat-card>
   <ng-template #notFound>

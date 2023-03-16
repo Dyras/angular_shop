@@ -1,6 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { BehaviorSubject } from 'rxjs';
 import { CartService } from '../cart-service/cart.service';
 
 @Component({
@@ -25,14 +24,10 @@ export class NavbarComponent {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         this.isUserLoggedIn = true;
-        this.cartService.currentCartTotalAmount$.next(
-          await this.cartService.setCartLength(null)
-        );
+        this.cartService.setCartLength(null);
       } else {
         this.isUserLoggedIn = false;
-        this.cartService.currentCartTotalAmount$.next(
-          await this.cartService.setCartLength(null)
-        );
+        this.cartService.setCartLength(null);
       }
     });
   }
@@ -43,5 +38,6 @@ export class NavbarComponent {
       console.log('User logged out');
       this.isUserLoggedIn = false;
     });
+    this.cartService.currentCartTotalAmount$.next(0);
   }
 }
