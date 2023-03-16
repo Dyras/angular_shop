@@ -42,9 +42,7 @@ export class LoginComponent {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.isUserLoggedIn = true;
-        setTimeout(() => {
-          this.router.navigate(['/products']);
-        }, 5000);
+        this.router.navigate(['/products']);
       } else {
         console.log('User is not logged in');
         this.isUserLoggedIn = false;

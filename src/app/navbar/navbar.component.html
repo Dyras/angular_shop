@@ -1,7 +1,7 @@
 <nav>
   <a routerLink="">Framsidan</a>
   <a routerLink="/products">Produkter</a>
-  <div *ngIf="badgeNumber == 0; else moreThanZero">
+  <div *ngIf="badgeNumber < 1; else moreThanZero">
     <a routerLink="/checkout">Varukorg</a>
   </div>
   <ng-template #moreThanZero>

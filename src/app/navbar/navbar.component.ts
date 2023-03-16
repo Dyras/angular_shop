@@ -8,7 +8,7 @@ import { CartService } from '../cart-service/cart.service';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
-  badgeNumber: number | undefined;
+  badgeNumber: number = 0;
   isUserLoggedIn: boolean | null = null;
 
   constructor(private cartService: CartService) {}
@@ -39,5 +39,8 @@ export class NavbarComponent {
       this.isUserLoggedIn = false;
     });
     this.cartService.currentCartTotalAmount$.next(0);
+    this.cartService.currentCartContents$.next([]);
+    // Send users to the product page after logout
+    window.location.href = '/products';
   }
 }

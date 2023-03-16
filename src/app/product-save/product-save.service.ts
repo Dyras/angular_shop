@@ -24,7 +24,6 @@ export class ProductSaveService {
     if (firestoreCartData != null && firestoreCartData.length !== 0) {
       for (let i = 0; i < firestoreCartData.length; i++) {
         if (firestoreCartData[i].id === product.id) {
-          console.log(firestoreCartData[i].id, ' === ', product.id);
           firestoreCartData[i].amount = amount;
           matchFound = true;
           setDoc(doc(getFirestore(), currentUser.type, currentUser.uid), {

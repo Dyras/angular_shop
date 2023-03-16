@@ -11,22 +11,23 @@ export class CartService {
   currentCartValue = 0;
   currentCartTotalAmount$: BehaviorSubject<number> =
     new BehaviorSubject<number>(0);
+  defaultObject: IProductSaved = {
+    id: '0',
+    name: '',
+    manufacturer: '',
+    description: '',
+    articleType: '',
+    price: 0,
+    rating: 0,
+    imageUrl: '',
+    outOfStock: false,
+    slug: '',
+    packaging: '',
+    publishedAt: new Date(),
+    amount: 0,
+  };
   currentCartContents$ = new BehaviorSubject<IProductSaved[]>([
-    {
-      id: '0',
-      name: '',
-      manufacturer: '',
-      description: '',
-      articleType: '',
-      price: 0,
-      rating: 0,
-      imageUrl: '',
-      outOfStock: false,
-      slug: '',
-      packaging: '',
-      publishedAt: new Date(),
-      amount: 0,
-    },
+    this.defaultObject,
   ]);
   constructor() {
     this.currentCartContents$.subscribe((value) => {
@@ -49,6 +50,14 @@ export class CartService {
       userType = 'Temp_Users';
     }
     let presentInCart = false;
+    console.log('Current cart contents:', this.currentCartContents$.value);
+
+    let debug: boolean = false;
+    try {
+      this.currentCartContents$.value[0].amount === -2;
+    } catch (error) {
+      debug = true;
+    }
 
     for (let i = 0; i < this.currentCartContents$.value.length; i++) {
       if (this.currentCartContents$.value[i].id === product?.id) {
@@ -58,23 +67,51 @@ export class CartService {
     }
     console.log('Present in cart:', presentInCart);
     console.log('Product:', product);
+
     // Remove item from cart
     if (product !== null && product.amount === -1) {
       console.log('remove');
       for (let i = 0; i < this.currentCartContents$.value.length; i++) {
         if (this.currentCartContents$.value[i].id === product.id) {
           this.currentCartContents$.value.splice(i, 1);
+          console.log('Nuvarande värde:', this.currentCartContents$.value);
+          console.log('Värdet som skickas in', newValue);
           newValue = this.cartLengthCounter(
             this.currentCartContents$.value,
             newValue
           );
-
-          this.currentCartValue = newValue;
+          console.log('New value:', newValue);
+          console.log(newValue);
+          this.currentCartTotalAmount$.next(newValue);
+        }
+        console.log('Current length', this.currentCartContents$.value);
+        if (this.currentCartContents$.value.length < 1) {
+          console.log('EMPTY CART!');
+          this.currentCartValue = 0;
+          this.currentCartTotalAmount$.next(0);
         }
       }
+    } else if (
+      debug ||
+      (this.currentCartContents$.value[0].id !== '0' && !presentInCart)
+    ) {
+      console.log('add');
+      if (product) {
+        this.currentCartContents$.value.push(product);
+      }
+
+      newValue = this.cartLengthCounter(
+        this.currentCartContents$.value,
+        newValue
+      );
+
+      console.log('New value:', newValue);
+      console.log('Current value:', this.currentCartValue);
+      console.log('Current cart contents:', this.currentCartContents$.value);
+      this.currentCartTotalAmount$.next(newValue);
     }
     // First time loading cart
-    if (this.currentCartContents$.value[0].id === '0') {
+    else if (this.currentCartContents$.value[0].id === '0') {
       console.log('first time');
       const fetchedArray = (
         await getDoc(doc(getFirestore(), userType, user || ''))
@@ -91,20 +128,6 @@ export class CartService {
         );
       }
       this.currentCartValue = newValue;
-    } else if (!presentInCart) {
-      console.log('add');
-      if (product) {
-        this.currentCartContents$.value.push(product);
-      }
-
-      newValue = this.cartLengthCounter(
-        this.currentCartContents$.value,
-        newValue
-      );
-
-      console.log('New value:', newValue);
-      console.log('Current value:', this.currentCartValue);
-      this.currentCartTotalAmount$.next(newValue);
     }
     // Update the cart
     else if (this.currentCartContents$.value.length !== 0 && presentInCart) {
@@ -132,6 +155,7 @@ export class CartService {
   }
 
   cartLengthCounter(currentCart: IProductSaved[], newValue: number) {
+    console.log('Counting cart length:', currentCart);
     for (let i = 0; i < currentCart.length; i++) {
       newValue += currentCart[i].amount;
     }
