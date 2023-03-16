@@ -64,9 +64,11 @@ export class CartService {
       for (let i = 0; i < this.currentCartContents$.value.length; i++) {
         if (this.currentCartContents$.value[i].id === product.id) {
           this.currentCartContents$.value.splice(i, 1);
-          for (let i = 0; i < this.currentCartContents$.value.length; i++) {
-            newValue += this.currentCartContents$.value[i].amount;
-          }
+          newValue = this.cartLengthCounter(
+            this.currentCartContents$.value,
+            newValue
+          );
+
           this.currentCartValue = newValue;
         }
       }
@@ -83,9 +85,10 @@ export class CartService {
 
       this.currentCartContents$.next(currentArray);
       if (this.currentCartContents$.value.length > 0) {
-        for (let i = 0; i < this.currentCartContents$.value.length; i++) {
-          newValue += this.currentCartContents$.value[i].amount;
-        }
+        newValue = this.cartLengthCounter(
+          this.currentCartContents$.value,
+          newValue
+        );
       }
       this.currentCartValue = newValue;
     } else if (!presentInCart) {
@@ -93,9 +96,12 @@ export class CartService {
       if (product) {
         this.currentCartContents$.value.push(product);
       }
-      for (let i = 0; i < this.currentCartContents$.value.length; i++) {
-        newValue += this.currentCartContents$.value[i].amount;
-      }
+
+      newValue = this.cartLengthCounter(
+        this.currentCartContents$.value,
+        newValue
+      );
+
       console.log('New value:', newValue);
       console.log('Current value:', this.currentCartValue);
       this.currentCartTotalAmount$.next(newValue);
@@ -103,18 +109,32 @@ export class CartService {
     // Update the cart
     else if (this.currentCartContents$.value.length !== 0 && presentInCart) {
       console.log('update');
-      let currentArray = this.currentCartContents$.value;
-      for (let i = 0; i < currentArray.length; i++) {
-        if (currentArray[i].id === product?.id) {
-          console.log('Looking for ID');
-          currentArray[i].amount = product.amount;
-        }
+      let currentCart = this.currentCartContents$.value;
+      currentCart = this.idSearcher(currentCart, product as IProductSaved);
+
+      for (let i = 0; i < currentCart.length; i++) {
+        newValue += currentCart[i].amount;
       }
-      for (let i = 0; i < currentArray.length; i++) {
-        newValue += currentArray[i].amount;
-      }
-      this.currentCartContents$.next(currentArray);
-      this.currentCartValue = newValue;
+      this.currentCartContents$.next(currentCart);
+      this.currentCartValue = this.cartLengthCounter(currentCart, newValue);
     }
+  }
+
+  idSearcher(currentCart: IProductSaved[], product: IProductSaved) {
+    for (let i = 0; i < currentCart.length; i++) {
+      if (currentCart[i].id === product?.id) {
+        console.log('Looking for ID');
+        currentCart[i].amount = product.amount;
+        return currentCart;
+      }
+    }
+    return currentCart;
+  }
+
+  cartLengthCounter(currentCart: IProductSaved[], newValue: number) {
+    for (let i = 0; i < currentCart.length; i++) {
+      newValue += currentCart[i].amount;
+    }
+    return newValue;
   }
 }
