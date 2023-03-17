@@ -15,7 +15,6 @@ export class NavbarComponent {
 
   async ngOnInit(): Promise<void> {
     this.cartService.currentCartTotalAmount$.subscribe((value) => {
-      console.log('BadgeNumber:', value);
       this.badgeNumber = value;
     });
 

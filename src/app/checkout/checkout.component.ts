@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, getFirestore } from 'firebase/firestore';
 import { BehaviorSubject } from 'rxjs';
 import { CartService } from '../cart-service/cart.service';
 import { ProductSaveService } from '../product-save/product-save.service';
@@ -24,33 +23,13 @@ export class CheckoutComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    const auth = getAuth();
-    const firestore = getFirestore();
-    let userId = '';
-    let userType = '';
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        userId = user.uid;
-        userType = 'Users';
-      } else {
-        userId = localStorage.getItem('id') || '';
-        userType = 'Temp_Users';
+    this.cartService.currentCartContents$.subscribe((data) => {
+      if (data.length !== 0) {
+        this.itemsInCart$.next(data);
       }
-      const firestoreCart = await getDoc(doc(firestore, userType, userId));
-      if (firestoreCart) {
-        setTimeout(() => {
-          const firestoreCartData = firestoreCart.data();
-          if (firestoreCartData) {
-            this.itemsInCart$.next(
-              firestoreCartData['cart'] as IProductSaved[]
-            );
-          }
-          this.updateTotalCost();
-        }, 200);
-      }
+      this.updateTotalCost();
     });
   }
-
   updateTotalCost() {
     const storageArray = this.itemsInCart$.value || [];
     let counter = 0;
