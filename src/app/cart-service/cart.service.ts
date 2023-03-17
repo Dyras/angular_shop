@@ -70,76 +70,22 @@ export class CartService {
 
     // Remove item from cart
     if (product !== null && product.amount === -1) {
-      console.log('remove');
-      for (let i = 0; i < this.currentCartContents$.value.length; i++) {
-        if (this.currentCartContents$.value[i].id === product.id) {
-          this.currentCartContents$.value.splice(i, 1);
-          console.log('Nuvarande värde:', this.currentCartContents$.value);
-          console.log('Värdet som skickas in', newValue);
-          newValue = this.cartLengthCounter(
-            this.currentCartContents$.value,
-            newValue
-          );
-          console.log('New value:', newValue);
-          console.log(newValue);
-          this.currentCartTotalAmount$.next(newValue);
-        }
-        console.log('Current length', this.currentCartContents$.value);
-        if (this.currentCartContents$.value.length < 1) {
-          console.log('EMPTY CART!');
-          this.currentCartValue = 0;
-          this.currentCartTotalAmount$.next(0);
-        }
-      }
-    } else if (
+      this.removeItem(product as IProductSaved);
+    }
+    // Add item to cart
+    else if (
       debug ||
       (this.currentCartContents$.value[0].id !== '0' && !presentInCart)
     ) {
-      console.log('add');
-      if (product) {
-        this.currentCartContents$.value.push(product);
-      }
-
-      newValue = this.cartLengthCounter(
-        this.currentCartContents$.value,
-        newValue
-      );
-
-      console.log('New value:', newValue);
-      console.log('Current value:', this.currentCartValue);
-      console.log('Current cart contents:', this.currentCartContents$.value);
-      this.currentCartTotalAmount$.next(newValue);
+      this.addItem(product as IProductSaved);
     }
     // First time loading cart
     else if (this.currentCartContents$.value[0].id === '0') {
-      console.log('first time');
-      const fetchedArray = (
-        await getDoc(doc(getFirestore(), userType, user || ''))
-      ).data();
-      if (fetchedArray) {
-        currentArray = fetchedArray['cart'] as IProductSaved[];
-      }
-
-      this.currentCartContents$.next(currentArray);
-      if (this.currentCartContents$.value.length > 0) {
-        newValue = this.cartLengthCounter(
-          this.currentCartContents$.value,
-          newValue
-        );
-      }
-      this.currentCartValue = newValue;
+      this.firstLoadCart(user, userType);
     }
     // Update the cart
     else if (this.currentCartContents$.value.length !== 0 && presentInCart) {
-      console.log('update');
-      let currentCart = this.currentCartContents$.value;
-      currentCart = this.idSearcher(currentCart, product as IProductSaved);
-
-      for (let i = 0; i < currentCart.length; i++) {
-        newValue += currentCart[i].amount;
-      }
-      this.currentCartContents$.next(currentCart);
-      this.currentCartValue = this.cartLengthCounter(currentCart, newValue);
+      this.updateCart(product as IProductSaved);
     }
   }
 
@@ -160,5 +106,78 @@ export class CartService {
       newValue += currentCart[i].amount;
     }
     return newValue;
+  }
+  removeItem(product: IProductSaved) {
+    let newValue = 0;
+    console.log('remove');
+    for (let i = 0; i < this.currentCartContents$.value.length; i++) {
+      if (this.currentCartContents$.value[i].id === product.id) {
+        this.currentCartContents$.value.splice(i, 1);
+        console.log('Nuvarande värde:', this.currentCartContents$.value);
+        console.log('Värdet som skickas in', newValue);
+        newValue = this.cartLengthCounter(
+          this.currentCartContents$.value,
+          newValue
+        );
+        console.log('New value:', newValue);
+        console.log(newValue);
+        this.currentCartTotalAmount$.next(newValue);
+      }
+      console.log('Current length', this.currentCartContents$.value);
+      if (this.currentCartContents$.value.length < 1) {
+        console.log('EMPTY CART!');
+        this.currentCartValue = 0;
+        this.currentCartTotalAmount$.next(0);
+      }
+    }
+  }
+  addItem(product: IProductSaved) {
+    let newValue = 0;
+    console.log('add');
+    if (product) {
+      this.currentCartContents$.value.push(product);
+    }
+    newValue = this.cartLengthCounter(
+      this.currentCartContents$.value,
+      newValue
+    );
+    console.log('New value:', newValue);
+    console.log('Current value:', this.currentCartValue);
+    console.log('Current cart contents:', this.currentCartContents$.value);
+    this.currentCartTotalAmount$.next(newValue);
+  }
+
+  async firstLoadCart(user: string | null, userType: string) {
+    console.log('first time');
+    let newValue = 0;
+    let currentArray: IProductSaved[] = [];
+    const fetchedArray = (
+      await getDoc(doc(getFirestore(), userType, user || ''))
+    ).data();
+    if (fetchedArray) {
+      currentArray = fetchedArray['cart'] as IProductSaved[];
+    }
+
+    this.currentCartContents$.next(currentArray);
+    if (this.currentCartContents$.value.length > 0) {
+      newValue = this.cartLengthCounter(
+        this.currentCartContents$.value,
+        newValue
+      );
+    }
+    this.currentCartValue = newValue;
+  }
+
+  async updateCart(product: IProductSaved | null) {
+    let newValue = 0;
+    console.log('update');
+    let currentCart = this.currentCartContents$.value;
+    currentCart = this.idSearcher(currentCart, product as IProductSaved);
+
+    for (let i = 0; i < currentCart.length; i++) {
+      newValue += currentCart[i].amount;
+    }
+    this.currentCartContents$.next(currentCart);
+    this.currentCartValue = this.cartLengthCounter(currentCart, newValue);
   }
 }
