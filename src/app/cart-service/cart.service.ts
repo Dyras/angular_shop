@@ -9,6 +9,7 @@ import { IProductSaved } from '../products/product';
 })
 export class CartService {
   cartLoaded = false;
+  cartLoadedUser = false;
   currentCartValue = 0;
   currentCartTotalAmount$: BehaviorSubject<number> =
     new BehaviorSubject<number>(0);
@@ -46,10 +47,15 @@ export class CartService {
         userType = 'Temp_Users';
         userId = localStorage.getItem('id') || '';
       }
-      if (this.cartLoaded === false) {
+      if (this.cartLoaded === false && userType === 'Temp_Users') {
         console.log('Test 0');
         this.firstLoadCart(userId, userType);
         this.cartLoaded = true;
+        this.cartLoadedUser = false;
+      } else if (this.cartLoadedUser === false && userType === 'Users') {
+        this.firstLoadCart(userId, userType);
+        this.cartLoadedUser = true;
+        this.cartLoaded = false;
       }
     });
   }
