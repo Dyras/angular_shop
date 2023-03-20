@@ -240,7 +240,7 @@ export class CartService {
     const userId = getAuth().currentUser?.uid;
 
     const userType = 'Users';
-
+    window.localStorage.removeItem('payment');
     if (userId !== undefined) {
       await setDoc(doc(getFirestore(), userType, userId), {
         cart: [],

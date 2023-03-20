@@ -13,7 +13,7 @@ export class OrderConfirmationComponent {
     console.log(document.referrer);
 
     // Checks the referer
-    if (document.referrer.includes('checkout')) {
+    if (window.localStorage.getItem('payment') === 'true') {
       // If the referer is checkout, the order is confirmed
       console.log('Order confirmed!');
       this.properReferer = true;

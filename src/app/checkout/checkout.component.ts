@@ -98,6 +98,7 @@ export class CheckoutComponent implements OnInit {
         { merge: mergeVariable };
     }
     // Send the user to the order confirmation page
+    window.localStorage.setItem('payment', 'true');
     this.router.navigate(['/order-confirmation']);
   }
 }
