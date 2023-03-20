@@ -234,4 +234,19 @@ export class CartService {
     newValue = this.cartLengthCounter(this.currentCartContents$.value);
     this.currentCartTotalAmount$.next(newValue);
   }
+
+  // Empty cart in the database
+  async emptyCart() {
+    const userId = getAuth().currentUser?.uid;
+
+    const userType = 'Users';
+
+    if (userId !== undefined) {
+      await setDoc(doc(getFirestore(), userType, userId), {
+        cart: [],
+      });
+      this.currentCartContents$.next([]);
+      this.currentCartTotalAmount$.next(0);
+    }
+  }
 }

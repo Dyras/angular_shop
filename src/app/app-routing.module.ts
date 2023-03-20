@@ -9,6 +9,7 @@ import { ContactComponent } from './bottom-bar/contact/contact.component';
 import { AboutComponent } from './bottom-bar/about/about.component';
 import { RegisterComponent } from './user-handling/register/register.component';
 import { LoginComponent } from './user-handling/login/login.component';
+import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'order-confirmation',
+    component: OrderConfirmationComponent,
   },
   {
     path: '**',
