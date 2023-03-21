@@ -149,66 +149,40 @@ export class CartService {
       await getDoc(doc(getFirestore(), userType, user || ''))
     ).data();
 
-    if (userType === 'Users') {
-      console.log('Test 0.5');
-      const tempArray = (
-        await getDoc(doc(getFirestore(), 'Temp_Users', tempUser || ''))
-      ).data();
-      console.log('Test 1');
-      if (tempArray?.['cart']?.length > 0) {
-        this.currentCartContents$.next(tempArray?.['cart'] as IProductSaved[]);
-      }
-      let currentArray = tempArray?.['cart'] as IProductSaved[];
-
-      if (this.currentCartContents$.value.length > 0 && userAuth !== null) {
+    if (userAuth?.uid === user) {
+      if (this.currentCartContents$.value.length > 0) {
         console.log('Moving temp cart to user cart');
+        console.log('Test 1');
+
         setDoc(doc(getFirestore(), 'Users', user || ''), {
           cart: this.currentCartContents$.value,
         });
-      } else if (
-        this.currentCartContents$.value.length < 1 &&
-        userAuth !== null
-      ) {
+        newValue = this.cartLengthCounter(this.currentCartContents$.value);
+      } else {
         getDoc(doc(getFirestore(), 'Users', user || '')).then((doc) => {
-          console.log('Fetching user cart');
           if (doc.exists()) {
-            console.log('Document data:', doc.data());
+            console.log('Test 2');
             this.currentCartContents$.next(
               doc.data()?.['cart'] as IProductSaved[]
             );
-            currentArray = doc.data()?.['cart'] as IProductSaved[];
+            this.currentCartTotalAmount$.next(
+              this.cartLengthCounter(this.currentCartContents$.value)
+            );
           } else {
-            console.log('No such document!');
           }
         });
-      } else if (!auth) {
-        getDoc(doc(getFirestore(), 'Temp_Users', tempUser || '')).then(
-          (doc) => {
-            console.log('Downloading temp cart');
-            if (doc.exists()) {
-              console.log('Document data:', doc.data());
-              this.currentCartContents$.next(
-                doc.data()?.['cart'] as IProductSaved[]
-              );
-              this.currentCartTotalAmount$.next(
-                this.cartLengthCounter(doc.data()?.['cart'] as IProductSaved[])
-              );
-            }
-          }
-        );
+      }
+    } else {
+      console.log('Test 4');
+    }
+
+    if (this.currentCartContents$.value) {
+      console.log(this.currentCartContents$.value);
+      this.currentCartContents$.next(currentArray);
+      if (this.currentCartContents$.value.length > 0) {
+        newValue = this.cartLengthCounter(this.currentCartContents$.value);
       }
     }
-
-    currentArray;
-
-    this.currentCartContents$.next(currentArray);
-    if (this.currentCartContents$.value.length > 0) {
-      newValue = this.cartLengthCounter(this.currentCartContents$.value);
-    }
-
-    newValue = this.cartLengthCounter(this.currentCartContents$.value);
-    this.currentCartTotalAmount$.next(newValue);
-    this.currentCartValue = newValue;
   }
 
   // Add item to cart
