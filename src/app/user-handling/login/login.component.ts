@@ -12,6 +12,7 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { Router } from '@angular/router';
+import { CartService } from 'src/app/cart-service/cart.service';
 
 @Component({
   templateUrl: './login.component.html',
@@ -34,7 +35,7 @@ export class LoginComponent {
 
   matcher = new MyErrorStateMatcher();
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private cartService: CartService) {
     document.title = 'Johans webbshop - Registrering';
 
     const auth = getAuth();
@@ -60,6 +61,7 @@ export class LoginComponent {
         const user = userCredential.user;
         console.log('User is logged in');
         this.isUserLoggedIn = true;
+        this.cartService.firstLoadCart(user.uid, 'Users');
       }
     );
   }

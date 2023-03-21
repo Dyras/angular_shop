@@ -28,9 +28,7 @@ export class CartService {
     publishedAt: new Date(),
     amount: 0,
   };
-  currentCartContents$ = new BehaviorSubject<IProductSaved[]>([
-    this.defaultObject,
-  ]);
+  currentCartContents$ = new BehaviorSubject<IProductSaved[]>([]);
   constructor() {
     this.currentCartContents$.subscribe((value) => {
       let total = 0;
@@ -139,56 +137,69 @@ export class CartService {
 
   // Load the cart
   async firstLoadCart(user: string | null, userType: string) {
-    console.log('first time', user, userType);
+    const tempUser = localStorage.getItem('id') || null;
+    console.log('first time, temp', tempUser, userType);
+    console.log('first time, user', user, userType);
     let newValue = 0;
     let currentArray: IProductSaved[] = [];
-
+    const auth = getAuth();
+    const userAuth = auth.currentUser;
+    console.log(userAuth);
     let fetchedArray = (
       await getDoc(doc(getFirestore(), userType, user || ''))
     ).data();
 
-    // Här ligger någon bugg som förhindrar nedladdningen
     if (userType === 'Users') {
       console.log('Test 0.5');
-      const tempArray = await (
-        await getDoc(doc(getFirestore(), 'Temp_Users', user || ''))
+      const tempArray = (
+        await getDoc(doc(getFirestore(), 'Temp_Users', tempUser || ''))
       ).data();
       console.log('Test 1');
+      if (tempArray?.['cart']?.length > 0) {
+        this.currentCartContents$.next(tempArray?.['cart'] as IProductSaved[]);
+      }
+      let currentArray = tempArray?.['cart'] as IProductSaved[];
 
-      if (tempArray != undefined) {
-        console.log('Test 2');
-        const tempArrayCart = tempArray['cart'] as IProductSaved[];
-        if (tempArrayCart.length > 0) {
-          console.log('Test 3');
-          setDoc(doc(getFirestore(), 'Users', user || ''), {
-            cart: tempArrayCart,
-          });
-          fetchedArray = tempArray;
-          setDoc(
-            doc(getFirestore(), 'Temp_Users', localStorage.getItem('id') || ''),
-            {
-              cart: [],
+      if (this.currentCartContents$.value.length > 0 && userAuth !== null) {
+        console.log('Moving temp cart to user cart');
+        setDoc(doc(getFirestore(), 'Users', user || ''), {
+          cart: this.currentCartContents$.value,
+        });
+      } else if (
+        this.currentCartContents$.value.length < 1 &&
+        userAuth !== null
+      ) {
+        getDoc(doc(getFirestore(), 'Users', user || '')).then((doc) => {
+          console.log('Fetching user cart');
+          if (doc.exists()) {
+            console.log('Document data:', doc.data());
+            this.currentCartContents$.next(
+              doc.data()?.['cart'] as IProductSaved[]
+            );
+            currentArray = doc.data()?.['cart'] as IProductSaved[];
+          } else {
+            console.log('No such document!');
+          }
+        });
+      } else if (!auth) {
+        getDoc(doc(getFirestore(), 'Temp_Users', tempUser || '')).then(
+          (doc) => {
+            console.log('Downloading temp cart');
+            if (doc.exists()) {
+              console.log('Document data:', doc.data());
+              this.currentCartContents$.next(
+                doc.data()?.['cart'] as IProductSaved[]
+              );
+              this.currentCartTotalAmount$.next(
+                this.cartLengthCounter(doc.data()?.['cart'] as IProductSaved[])
+              );
             }
-          );
-        } else {
-          console.log('Test 4');
-          fetchedArray = (
-            await getDoc(doc(getFirestore(), userType, user || ''))
-          ).data();
-          console.log('fetchedArray', fetchedArray);
-        }
+          }
+        );
       }
     }
 
-    if (fetchedArray) {
-      currentArray = fetchedArray['cart'] as IProductSaved[];
-    }
-
-    try {
-      if (currentArray[0].id === '0') {
-        currentArray.splice(0, 1);
-      }
-    } catch {}
+    currentArray;
 
     this.currentCartContents$.next(currentArray);
     if (this.currentCartContents$.value.length > 0) {
