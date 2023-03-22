@@ -1,15 +1,41 @@
-<div *ngIf="fetchedHistory$ | async as history">
-  <div *ngFor="let order of history">
-    <div>
-      Tid och datum:
-      {{ order.date.toDate() | date : "YYYY-MM-dd HH:mm" }}
-    </div>
-    <div>Beställda objekt: {{ order.total }}</div>
-    <div>Drycker i beställningen:</div>
-    <div *ngFor="let item of order.items">
-      <div>Item name: {{ item.name }}</div>
-      <div>Item price: {{ item.price }}</div>
-      <div>Item amount: {{ item.amount }}</div>
+<a
+  *ngIf="
+    fetchedHistory$ !== null &&
+      fetchedHistory$ !== undefined &&
+      fetchedHistory$.value.length > 0;
+    then notEmptyHistory;
+    else emptyHistory
+  "
+></a>
+
+<ng-template #notEmptyHistory>
+  <div
+    *ngIf="fetchedHistory$ | async as history"
+    class="purchase-card-container"
+  >
+    <div *ngFor="let order of history" class="purchase-card">
+      <div>
+        Beställningsdatum:
+        {{ order.date.toDate() | date : "YYYY-MM-dd HH:mm" }}
+      </div>
+      <div>Beställda objekt: {{ order.totalAmount }} st</div>
+      <div>Totalpris för allt: {{ order.totalCost }}</div>
+      <br />
+
+      <div *ngFor="let item of order.items">
+        <div>
+          <strong>{{ item.name }}</strong>
+        </div>
+        <div>Styckpris: {{ item.price }} kr</div>
+        <div>Mängd: {{ item.amount }}</div>
+        <div>Totalpris: {{ item.price * item.amount }}</div>
+        <br />
+      </div>
     </div>
   </div>
-</div>
+</ng-template>
+<ng-template #emptyHistory>
+  <div class="purchase-card-container">
+    <div class="purchase-card">Du har inte köpt några produkter än!</div>
+  </div>
+</ng-template>

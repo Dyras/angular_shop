@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class HistoryPageComponent {
   date = new Date();
-  fetchedHistory$ = new BehaviorSubject(null);
+  fetchedHistory$ = new BehaviorSubject<any[]>([]);
   constructor() {
     const auth = getAuth();
     onAuthStateChanged(auth, async (user) => {
