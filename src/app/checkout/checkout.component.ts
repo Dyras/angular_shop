@@ -83,7 +83,12 @@ export class CheckoutComponent implements OnInit {
     };
 
     // Check if the user has something in the cart, just to be sure
-    if (this.totalItemCost$.value !== 0) {
+    if (this.totalItemCost$.value !== 0 && this.itemsInCart$.value !== null) {
+      let totalAmount;
+      for (let i = 0; i < this.itemsInCart$.value.length; i++) {
+        totalAmount = +this.itemsInCart$.value[i].amount;
+      }
+
       // Check if the user has a purchase history in Firestore
       const firestoreExist = await doesFirestoreEntryExist();
       if (firestoreExist) {
@@ -94,6 +99,7 @@ export class CheckoutComponent implements OnInit {
             id: Math.random().toString(36).substring(2, 31),
             items: this.itemsInCart$.value,
             totalCost: this.totalItemCost$.value,
+            totalAmount: totalAmount,
             date: new Date(),
           }),
         });
@@ -104,6 +110,7 @@ export class CheckoutComponent implements OnInit {
             id: Math.random().toString(36).substring(2, 31),
             items: this.itemsInCart$.value,
             totalCost: this.totalItemCost$.value,
+            totalAmount: totalAmount,
             date: new Date(),
           }),
         });
