@@ -10,6 +10,7 @@ import { AboutComponent } from './bottom-bar/about/about.component';
 import { RegisterComponent } from './user-handling/register/register.component';
 import { LoginComponent } from './user-handling/login/login.component';
 import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
+import { HistoryPageComponent } from './history-page/history-page.component';
 
 const routes: Routes = [
   {
@@ -51,6 +52,10 @@ const routes: Routes = [
   {
     path: 'order-confirmation',
     component: OrderConfirmationComponent,
+  },
+  {
+    path: 'history',
+    component: HistoryPageComponent,
   },
   {
     path: '**',
