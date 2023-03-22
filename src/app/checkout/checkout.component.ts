@@ -1,8 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
-import { BehaviorSubject, merge } from 'rxjs';
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  getFirestore,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
+import { BehaviorSubject } from 'rxjs';
 import { CartService } from '../cart-service/cart.service';
 import { ProductSaveService } from '../product-save/product-save.service';
 import { IProductSaved } from '../products/product';
@@ -81,21 +88,28 @@ export class CheckoutComponent implements OnInit {
       const firestoreExist = await doesFirestoreEntryExist();
       if (firestoreExist) {
         mergeVariable = true;
+
+        updateDoc(doc(getFirestore(), 'Purchase_History', userId), {
+          history: arrayUnion({
+            id: Math.random().toString(36).substring(2, 31),
+            items: this.itemsInCart$.value,
+            totalCost: this.totalItemCost$.value,
+            date: new Date(),
+          }),
+        });
       } else if (!firestoreExist) {
         mergeVariable = false;
+        setDoc(doc(getFirestore(), 'Purchase_History', userId), {
+          history: arrayUnion({
+            id: Math.random().toString(36).substring(2, 31),
+            items: this.itemsInCart$.value,
+            totalCost: this.totalItemCost$.value,
+            date: new Date(),
+          }),
+        });
       } else {
         console.log('Error: Something went wrong');
       }
-      // Add the purchase to the user's purchase history
-      // If the user doesn't have a purchase history, create one
-      setDoc(doc(getFirestore(), 'Purchase_History', userId), {}),
-        {
-          id: Math.random().toString(36).substring(2, 31),
-          items: this.itemsInCart$.value,
-          totalCost: this.totalItemCost$.value,
-          date: new Date(),
-        },
-        { merge: mergeVariable };
     }
     // Send the user to the order confirmation page
     window.localStorage.setItem('payment', 'true');
