@@ -18,7 +18,7 @@ export class HistoryPageComponent {
           doc(getFirestore(), 'Purchase_History', user.uid)
         );
         if (history.exists()) {
-          this.fetchedHistory$.next(history.data()['history']);
+          this.fetchedHistory$.next(history.data()['history'].reverse());
           console.log('Hämtade historiken:', this.fetchedHistory$);
         }
       }
