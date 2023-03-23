@@ -84,9 +84,9 @@ export class CheckoutComponent implements OnInit {
 
     // Check if the user has something in the cart, just to be sure
     if (this.totalItemCost$.value !== 0 && this.itemsInCart$.value !== null) {
-      let totalAmount;
+      let totalAmount = 0;
       for (let i = 0; i < this.itemsInCart$.value.length; i++) {
-        totalAmount = +this.itemsInCart$.value[i].amount;
+        totalAmount += this.itemsInCart$.value[i].amount;
       }
 
       // Check if the user has a purchase history in Firestore
