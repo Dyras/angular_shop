@@ -1,10 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
-
+$text-color: #fb8500;
+$background-color: #023047;
+$background-color-mat: #5b5656;
 html,
 body {
   height: 100%;
-  background-color: #023047;
-  color: #fb8500;
+  background-color: $background-color;
+  color: $text-color;
 }
 body {
   margin: 0;
@@ -21,6 +22,8 @@ a:hover {
 
 mat-card {
   width: 40%;
+  background-color: $background-color-mat !important;
+
   margin: 0 auto;
   display: block;
   transform: translate(50px, 100px);
@@ -29,5 +32,6 @@ mat-card {
   }
   mat-card-subtitle {
     padding: 0 16px;
+    color: $text-color !important;
   }
 }
