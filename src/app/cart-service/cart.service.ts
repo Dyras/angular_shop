@@ -148,6 +148,9 @@ export class CartService {
     let fetchedArray = (
       await getDoc(doc(getFirestore(), userType, user || ''))
     ).data();
+    if (fetchedArray) {
+      currentArray = fetchedArray?.['cart'] as IProductSaved[];
+    }
 
     if (userAuth?.uid === user) {
       if (this.currentCartContents$.value.length > 0) {

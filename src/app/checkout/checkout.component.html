@@ -1,4 +1,4 @@
-<a *ngIf="totalItemCost$.value > 0; then NotEmptyCart; else emptyCart"></a>
+<a *ngIf="itemsInCart$.value !== null; then NotEmptyCart; else emptyCart"></a>
 
 <ng-template #NotEmptyCart>
   <ul class="outer-cart">
