@@ -173,7 +173,18 @@ export class CartService {
         });
       }
     } else {
-      console.log('Test 4');
+      getDoc(doc(getFirestore(), 'Temp_Users', tempUser || '')).then((doc) => {
+        if (doc.exists()) {
+          console.log('Test 5');
+          this.currentCartContents$.next(
+            doc.data()?.['cart'] as IProductSaved[]
+          );
+          this.currentCartTotalAmount$.next(
+            this.cartLengthCounter(this.currentCartContents$.value)
+          );
+        } else {
+        }
+      });
     }
 
     if (this.currentCartContents$.value) {
