@@ -185,7 +185,6 @@ export class CartService {
           this.currentCartTotalAmount$.next(
             this.cartLengthCounter(this.currentCartContents$.value)
           );
-        } else {
         }
       });
     }
