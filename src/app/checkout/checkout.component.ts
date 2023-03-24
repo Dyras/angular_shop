@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
 import { BehaviorSubject } from 'rxjs';
 import { CartService } from '../cart-service/cart.service';
 import { PayService } from '../pay-service/pay-service';
@@ -43,13 +41,13 @@ export class CheckoutComponent implements OnInit {
     console.log(Math.random().toString(36).substring(2, 31));
   }
   updateTotalCost() {
-    const storageArray = this.itemsInCart$.value || [];
+    const storageArray = this.payService.itemsInCart$.value || [];
     let counter = 0;
     if (storageArray.length !== 0) {
       for (let i = 0; i < storageArray.length; i++) {
         counter += storageArray[i].amount * storageArray[i].price;
         if (i == storageArray.length - 1) {
-          this.totalItemCost$.next(counter);
+          this.payService.totalItemCost$.next(counter);
           this.zeroCheck = counter;
         }
       }

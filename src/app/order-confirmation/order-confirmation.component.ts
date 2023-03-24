@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { CartService } from '../cart-service/cart.service';
 
 @Component({
@@ -9,7 +10,7 @@ export class OrderConfirmationComponent {
   properReferer = false;
   // Prints out the current referer
 
-  constructor(cartService: CartService) {
+  constructor(cartService: CartService, private router: Router) {
     console.log(document.referrer);
 
     // Checks the referer
@@ -21,6 +22,7 @@ export class OrderConfirmationComponent {
     } else {
       // If the referer is not checkout, the order is not confirmed
       console.log('Order not confirmed!');
+      this.router.navigate(['']);
     }
   }
 }
