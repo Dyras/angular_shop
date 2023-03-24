@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { render } from 'creditcardpayments/creditCardPayments';
+import { getAuth } from 'firebase/auth';
 import { BehaviorSubject } from 'rxjs';
 import { CartService } from '../cart-service/cart.service';
 import { PayService } from '../pay-service/pay-service';
@@ -35,14 +36,16 @@ export class PaypalComponent {
         while (buttonContainer?.firstChild) {
           buttonContainer.removeChild(buttonContainer.firstChild);
         }
-        render({
-          id: '#PayPal',
-          currency: 'SEK',
-          value: this.value,
-          onApprove: (details) => {
-            this.payService.pay();
-          },
-        });
+        if (getAuth().currentUser)
+          render({
+            id: '#PayPal',
+            currency: 'SEK',
+            value: this.value,
+            onApprove: (details) => {
+              this.payService.pay();
+              this.cartService.currentCartContents$.unsubscribe();
+            },
+          });
       } catch (e) {
         console.log(e);
       }
