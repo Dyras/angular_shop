@@ -16,3 +16,10 @@ mat-card {
     color: $text-color !important;
   }
 }
+
+@media screen and (max-width: 600px) {
+  mat-card {
+    width: 100%;
+    transform: translate(0px, 100px);
+  }
+}

@@ -12,8 +12,15 @@ mat-card {
   mat-card-title {
     padding: 0 16px;
   }
-  padding: 0 16px;
   mat-card-subtitle {
+    padding: 0 16px;
     color: $text-color !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  mat-card {
+    width: 100%;
+    transform: translate(0px, 100px);
   }
 }
