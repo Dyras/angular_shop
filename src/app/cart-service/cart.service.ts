@@ -76,7 +76,9 @@ export class CartService {
       if (this.currentCartContents$.value[0].id === '0') {
         this.currentCartContents$.value.splice(0, 1);
       }
-    } catch {}
+    } catch (e) {
+      console.log('No default object found', e);
+    }
 
     console.log('Current cart contents:', this.currentCartContents$.value);
 
