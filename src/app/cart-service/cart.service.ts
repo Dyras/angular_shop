@@ -45,7 +45,11 @@ export class CartService {
         userType = 'Temp_Users';
         userId = localStorage.getItem('id') || '';
       }
-      if (this.cartLoaded === false && userType === 'Temp_Users') {
+      if (
+        this.cartLoaded === false &&
+        userType === 'Temp_Users' &&
+        userId !== ''
+      ) {
         console.log('Test 0');
         this.firstLoadCart(userId, userType);
         this.cartLoaded = true;
