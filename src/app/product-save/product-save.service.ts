@@ -7,10 +7,8 @@ import { IProduct, IProductSaved } from '../products/product';
   providedIn: 'root',
 })
 export class ProductSaveService {
-  constructor() {}
-
+  // Update the cart with the new amount of the product
   async updateCart(product: IProduct, amount: number) {
-    console.log('Amount', amount);
     let currentUser = this.checkUser();
     let matchFound = false;
 
@@ -44,15 +42,18 @@ export class ProductSaveService {
     }
   }
 
+  // Fetch the cart from Firestore
   async fetchCart(productType: string, productId: string) {
     const firestore = getFirestore();
     const document =
       (await getDoc(doc(firestore, productType, productId))) || [];
     if (document.exists()) {
+      console.log('Running fetchCart');
       return document.data()['cart'] || ([] as IProductSaved[]);
     }
   }
 
+  // Check if the user is logged in or not
   checkUser() {
     const auth = getAuth();
     let currentUser = { uid: 'test', type: 'test' };
@@ -72,8 +73,8 @@ export class ProductSaveService {
     return currentUser;
   }
 
+  // Remove a product from the cart
   async removeFromCart(product: IProduct | null) {
-    console.log('Körs!');
     if (product != null) {
       let currentUser = this.checkUser();
       let firestoreCartData = await this.fetchCart(

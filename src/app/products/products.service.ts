@@ -15,6 +15,7 @@ import { IProduct } from './product';
 })
 export class ProductService {
   ref = collection(this.firestore, 'products');
+  // Mock data, only used if Firestore is empty
   productList = [
     {
       id: 'wGXbXUmKsAAKBrWQtVZP',
@@ -49,7 +50,7 @@ export class ProductService {
   ];
 
   constructor(private firestore: Firestore) {}
-  // Create getProducts() method
+  // Get products from Firestore
   async getProducts(): Promise<IProduct[]> {
     const q = query(this.ref, limit(8));
 
