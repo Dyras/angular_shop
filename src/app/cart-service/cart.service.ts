@@ -70,12 +70,7 @@ export class CartService {
       user = localStorage.getItem('id') || null;
       userType = 'Temp_Users';
     }
-    let presentInCart = false;
-    for (let i = 0; i < this.currentCartContents$.value.length; i++) {
-      if (this.currentCartContents$.value[i].id === product?.id) {
-        presentInCart = true;
-      }
-    }
+
     try {
       if (this.currentCartContents$.value[0].id === '0') {
         this.currentCartContents$.value.splice(0, 1);
