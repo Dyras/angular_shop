@@ -29,7 +29,6 @@ export class ProductSaveService {
           }).catch((err) => {
             console.log('Error ', err);
           });
-          console.log(firestoreCartData[i].amount, ' === ', amount);
         }
       }
     }
@@ -48,7 +47,6 @@ export class ProductSaveService {
     const document =
       (await getDoc(doc(firestore, productType, productId))) || [];
     if (document.exists()) {
-      console.log('Running fetchCart');
       return document.data()['cart'] || ([] as IProductSaved[]);
     }
   }
@@ -69,7 +67,6 @@ export class ProductSaveService {
         type: 'Temp_Users',
       };
     }
-    console.log('Current User: ', currentUser);
     return currentUser;
   }
 

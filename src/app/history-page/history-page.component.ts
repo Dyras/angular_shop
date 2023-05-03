@@ -19,7 +19,6 @@ export class HistoryPageComponent {
         );
         if (history.exists()) {
           this.fetchedHistory$.next(history.data()['history'].reverse());
-          console.log('Hämtade historiken:', this.fetchedHistory$);
         }
       }
     });

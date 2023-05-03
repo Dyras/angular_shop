@@ -10,12 +10,9 @@ export class OrderConfirmationComponent {
   // Prints out the current referer
 
   constructor(cartService: CartService) {
-    console.log(document.referrer);
-
     // Checks the referer
     if (window.localStorage.getItem('payment') === 'true') {
       // If the referer is checkout, the order is confirmed
-      console.log('Order confirmed!');
       this.properReferer = true;
       cartService.emptyCart();
     } else {

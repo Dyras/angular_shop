@@ -34,7 +34,6 @@ export class NavbarComponent {
   logOut() {
     const auth = getAuth();
     auth.signOut().then(() => {
-      console.log('User logged out');
       this.isUserLoggedIn = false;
     });
     this.cartService.currentCartTotalAmount$.next(0);

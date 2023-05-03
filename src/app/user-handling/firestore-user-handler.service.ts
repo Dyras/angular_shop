@@ -13,7 +13,6 @@ export class FirestoreUserHandlerService {
     const firestore = getFirestore();
     auth.onAuthStateChanged(async (user) => {
       if (user) {
-        console.log('User is logged in');
         this.cartService.setCartLength(null);
 
         this.idCreator();

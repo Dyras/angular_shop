@@ -39,7 +39,6 @@ export class CheckoutComponent implements OnInit {
       }
       this.updateTotalCost();
     });
-    console.log(Math.random().toString(36).substring(2, 31));
   }
   updateTotalCost() {
     const storageArray = this.itemsInCart$.value || [];
@@ -71,7 +70,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   async pay() {
-    console.log('Pay');
     const userId = getAuth().currentUser?.uid || '';
     let mergeVariable = false;
     const userType = 'Users';

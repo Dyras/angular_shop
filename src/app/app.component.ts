@@ -7,8 +7,6 @@ import { FirestoreUserHandlerService } from './user-handling/firestore-user-hand
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'angular_shop';
-
   constructor(
     private firestoreUserHandlerService: FirestoreUserHandlerService
   ) {

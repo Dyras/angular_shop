@@ -64,7 +64,6 @@ export class SingleProductComponent implements OnInit {
     if (this.product$.value !== null) {
       this.productSaveService.updateCart(this.product$.value, amount);
     }
-    console.log(this.product$.value);
     this.howManyInCart = amount;
 
     if (this.product$.value !== null) {
