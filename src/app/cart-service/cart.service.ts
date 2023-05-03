@@ -32,9 +32,10 @@ export class CartService {
   constructor() {
     this.currentCartContents$.subscribe((value) => {
       let total = 0;
-      for (let i = 0; i < value.length; i++) {
-        total += value[i].amount;
-      }
+      total = value.reduce((prev, cur) => {
+        return (total += cur.amount);
+      }, 0);
+
       const auth = getAuth();
       let userId = '';
       let userType = '';
@@ -109,11 +110,11 @@ export class CartService {
   }
 
   cartLengthCounter(currentCart: IProductSaved[]) {
-    let newValue = 0;
     console.log('Counting cart length:', currentCart);
-    for (let i = 0; i < currentCart.length; i++) {
-      newValue += currentCart[i].amount;
-    }
+
+    const newValue = currentCart.reduce((prev, cur) => {
+      return (prev += cur.amount);
+    }, 0);
 
     console.log('New value:', newValue);
     return newValue;
@@ -210,12 +211,15 @@ export class CartService {
     console.log('add');
     console.log('product', product);
     let matchFound = -1;
-
-    for (let i = 0; i < this.currentCartContents$.value.length; i++) {
-      if (this.currentCartContents$.value[i].id === product.id) {
-        matchFound = i;
-      }
-    }
+    matchFound = this.currentCartContents$.value.reduce(
+      (matchFound, item, index) => {
+        if (item.id === product.id) {
+          return index;
+        }
+        return matchFound;
+      },
+      -1
+    );
     if (matchFound === -1) {
       this.currentCartContents$.value.push(product);
     } else {
