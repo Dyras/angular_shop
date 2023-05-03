@@ -16,6 +16,7 @@ const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+    title: 'Johans webshop',
   },
   {
     path: 'products',
@@ -28,34 +29,42 @@ const routes: Routes = [
   {
     path: 'checkout',
     component: CheckoutComponent,
+    title: 'Johans webshop - Kassa',
   },
   {
     path: 'privacy',
     component: PrivacyPageComponent,
+    title: 'Johans webshop - Sekretess',
   },
   {
     path: 'contact',
     component: ContactComponent,
+    title: 'Johans webshop - Kontakt',
   },
   {
     path: 'about',
     component: AboutComponent,
+    title: 'Johans webshop - Om oss',
   },
   {
     path: 'register',
     component: RegisterComponent,
+    title: 'Johans webshop - Registrering',
   },
   {
     path: 'login',
     component: LoginComponent,
+    title: 'Johans webshop - Logga in',
   },
   {
     path: 'order-confirmation',
     component: OrderConfirmationComponent,
+    title: 'Johans webshop - Orderbekräftelse',
   },
   {
     path: 'history',
     component: HistoryPageComponent,
+    title: 'Johans webshop - Historik',
   },
   {
     path: '**',

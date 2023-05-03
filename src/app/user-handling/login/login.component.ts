@@ -36,8 +36,6 @@ export class LoginComponent {
   matcher = new MyErrorStateMatcher();
 
   constructor(private router: Router, private cartService: CartService) {
-    document.title = 'Johans webbshop - Registrering';
-
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {

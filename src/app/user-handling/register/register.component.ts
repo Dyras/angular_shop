@@ -38,8 +38,6 @@ export class RegisterComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    document.title = 'Johans webbshop - Registrering';
-
     const auth = getAuth();
 
     onAuthStateChanged(auth, (user) => {

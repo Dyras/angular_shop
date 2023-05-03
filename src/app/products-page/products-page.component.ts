@@ -43,19 +43,19 @@ export class ProductsPageComponent {
     let title: string;
     switch (filter) {
       case 'rott':
-        title = 'Johans webbshop - Röda viner';
+        title = 'Johans webshop - Röda viner';
         break;
       case 'vitt':
-        title = 'Johans webbshop - Vita viner';
+        title = 'Johans webshop - Vita viner';
         break;
       case 'mousserande':
-        title = 'Johans webbshop - Bubbelviner';
+        title = 'Johans webshop - Bubbelviner';
         break;
       case 'rose':
-        title = 'Johans webbshop - Roséviner';
+        title = 'Johans webshop - Roséviner';
         break;
       default:
-        title = 'Johans webbshop - Viner';
+        title = 'Johans webshop - Viner';
         break;
     }
     document.title = title;
