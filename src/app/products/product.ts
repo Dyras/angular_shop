@@ -13,6 +13,8 @@ export interface IProduct {
   publishedAt?: Date;
   packaging: string;
   vintage?: number;
+
+  articleTypeSlug?: string;
 }
 
 export interface IProductSaved extends IProduct {

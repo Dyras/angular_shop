@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
 import {
-  getDocs,
   Firestore,
   collection,
-  limit,
-  query,
   doc,
   getDoc,
+  getDocs,
+  limit,
+  query,
 } from '@angular/fire/firestore';
+
 import { IProduct } from './product';
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -85,7 +86,7 @@ export class ProductService {
       .then((snapshot) => {
         return snapshot.docs
           .map((doc) => doc.data() as IProduct)
-          .filter((product) => product.articleType === type);
+          .filter((product) => product.articleTypeSlug === type);
       })
       .catch((error) => {
         console.log('Firestore error: ', error);
